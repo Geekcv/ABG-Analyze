@@ -1,0 +1,53 @@
+
+<div class="welcome-page">
+  <header class="welcome-navbar">
+    <a class="welcome-brand" routerLink="/">
+      <img src="/logo.ico" alt="Kirti Classess logo" />
+      <span>Kirti Classess</span>
+    </a>
+
+    <a routerLink="/" class="nav-link">ABG Analyzer</a>
+  </header>
+
+  <main class="welcome-main">
+    <section class="welcome-card">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="m5 12 4 4L19 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+
+      <span class="welcome-label">WELCOME TO KIRTI CLASSESS</span>
+
+      <h1>Welcome!</h1>
+
+      <p class="welcome-message">
+        We're glad you're here. Your learning journey starts here.
+      </p>
+
+      <div class="welcome-divider"></div>
+
+      <h2>What would you like to do?</h2>
+
+      <p class="welcome-description">
+        Continue to the ABG Analyzer to explore the calculator.
+      </p>
+
+      <a routerLink="/" class="welcome-button">
+        Open ABG Analyzer
+        <span aria-hidden="true">→</span>
+      </a>
+    </section>
+
+    <p class="welcome-copyright">
+      © {{ currentYear }} Kirti Classess. All rights reserved.
+    </p>
+  </main>
+</div>

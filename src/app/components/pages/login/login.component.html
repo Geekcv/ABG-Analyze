@@ -1,0 +1,119 @@
+<div class="login-page">
+  <header class="login-navbar">
+    <a class="login-brand" routerLink="/">
+      <img src="/logo.ico" alt="Kirti Classess logo" />
+      <span>Kirti Classess</span>
+    </a>
+
+    <a class="back-link" routerLink="/">← Back to Analyzer</a>
+  </header>
+
+  <main class="login-main">
+    <section class="login-card">
+      <div class="login-heading">
+        <div class="login-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <path
+              d="M4 21a8 8 0 0 1 16 0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+
+        <h1>Welcome back</h1>
+        <p>Sign in to your Kirti Classess account</p>
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" novalidate>
+        <div class="login-field">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            #emailModel="ngModel"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            email
+          />
+
+          <small
+            class="field-error"
+            *ngIf="emailModel.invalid && (emailModel.touched || submitted)"
+          >
+            Enter a valid email address.
+          </small>
+        </div>
+
+        <div class="login-field">
+          <label for="password">Password</label>
+
+          <div class="password-control">
+            <input
+              id="password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              #passwordModel="ngModel"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+
+            <button
+              type="button"
+              class="show-password"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+            >
+              {{ showPassword ? "Hide" : "Show" }}
+            </button>
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="
+              passwordModel.invalid && (passwordModel.touched || submitted)
+            "
+          >
+            Password is required.
+          </small>
+        </div>
+
+        <button class="login-submit" type="submit">
+          Sign in
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <p class="login-disclaimer">
+        Secure account access will be available after authentication is
+        connected to the server.
+      </p>
+
+      <div class="login-footer">
+        <span>New to Kirti Classess?</span>
+        <a routerLink="/" aria-label="Return to ABG Analyzer">
+          Explore the analyzer
+        </a>
+      </div>
+    </section>
+
+    <p class="login-copyright">
+      © {{ currentYear }} Kirti Classess. All rights reserved.
+    </p>
+  </main>
+</div>
