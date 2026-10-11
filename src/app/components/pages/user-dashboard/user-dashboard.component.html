@@ -1,0 +1,42 @@
+
+<div class="user-page">
+  <header class="navbar">
+    <a routerLink="/" class="brand">🩺 ABG Analyzer</a>
+
+    <div class="nav-actions">
+      <span class="user-label">{{ userName }}</span>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="welcome">
+      <p class="eyebrow">YOUR WORKSPACE</p>
+      <h1>Welcome, {{ userName }} 👋</h1>
+      <p>Analyze arterial blood gas reports from one place.</p>
+    </section>
+
+    <section class="analyzer-card">
+      <div class="icon-box">🩺</div>
+      <h2>ABG Analyzer</h2>
+      <p>
+        Open the analyzer to enter your ABG values and review
+        the available analysis.
+      </p>
+      <a routerLink="/">Open ABG Analyzer →</a>
+    </section>
+
+    <section class="info-card">
+      <h2>Recent Analysis</h2>
+      <p>
+        Your analysis history will appear here after history storage
+        is connected to the backend.
+      </p>
+    </section>
+
+    <p class="disclaimer">
+      ABG analysis is a clinical decision-support aid, not a substitute
+      for assessment by a qualified healthcare professional.
+    </p>
+  </main>
+</div>

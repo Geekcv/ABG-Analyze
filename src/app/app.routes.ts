@@ -3,6 +3,8 @@ import { HomeComponent } from './components/pages/home/home.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { SignupComponent } from './components/pages/signup/signup.component';
+import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component';
+import { UserDashboardComponent } from './components/pages/user-dashboard/user-dashboard.component';
 
 export const routes: Routes = [
 
@@ -17,56 +19,12 @@ export const routes: Routes = [
   },
     { path: 'welcome', component: WelcomeComponent },
       { path: 'signup', component: SignupComponent },
+       { path: 'admin-dashboard', component: AdminDashboardComponent },
+  { path: 'user-dashboard', component: UserDashboardComponent },
 
   {
     path: '**',
     redirectTo: ''
   }
-
-
-//       { path: '', redirectTo: 'login', pathMatch: 'full' },
-//   { path: 'login', component: LoginComponent },
-// //   { path: 'assignedlocation', component: AssignedLocation },
-// //   { path: 'home', component: HomeComponent },
-
-//   { 
-//     path: 'home', 
-//     canActivate: [authGuard],
-//     canActivateChild: [authGuard],
-//     component: HomeComponent,
-//     children: [
-//     //   { path: 'assignedlocation', component: AssignedLocation },
-//       { path: 'user', component: UserComponents,data: { roles: ['Admin'] } },
-//       { path: 'dashboard', component: Dashboard,data: { roles: ['Admin'] } },
-//       { path: 'familyforms', component: FamilyComponents,data: {roles:['Admin','Operator']} },
-//       { path: 'viewlocation', component: ViewlocationComponents,data: { roles: ['Operator'] } },
-//       { path: 'assignedlocation', component: LocationassignedComponents,data: { roles: ['Admin'] } },
-//       { path: 'viewfamily', component: ViewFamilydata,data: {roles:['Admin','Operator']} },
-//       { path: 'showlocations', component: ShowAllUserLocations,data: { roles: ['Admin'] } },
-//       { path: 'showstate', component: ShowallLocations,data: {roles:['Admin','Operator']} },
-//       { path: 'pagenotfound', component: PageNotFoundComponent,data: {roles:['Admin','Operator']} },
-//       {path:'edit-family',component: FamilyComponents,data: {roles:['Admin','Operator']} },
-//       { path: 'filterfamily', component: Buttonbasedfilter,data: {roles:['Admin']} },
-//       { path: 'sanghoffice', component: Santoffice,data: {roles:['Admin']} },
-//       { path: '**', component: PageNotFoundComponent }
-
-
-
-
-
-
-//     ]
-//   },
-//   { path: '**', component: PageNotFoundComponent }
-
-
-
-
-
-
-
-
-
-
 
 ];

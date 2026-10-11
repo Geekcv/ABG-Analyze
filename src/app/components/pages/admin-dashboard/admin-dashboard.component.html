@@ -1,0 +1,48 @@
+
+<div class="dashboard">
+  <aside class="sidebar">
+    <h2>🩺 ABG Analyzer</h2>
+
+    <a routerLink="/admin-dashboard" class="active">Dashboard</a>
+    <a >User View</a>
+
+    <button class="logout" (click)="logout()">Logout ↗</button>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ADMIN PANEL</p>
+        <h1>Welcome, {{ adminName }}!</h1>
+        <p>Manage your ABG Analyzer application.</p>
+      </div>
+      <span class="role-badge">ADMIN</span>
+    </header>
+
+    <section class="stats">
+      <article class="stat-card" *ngFor="let stat of stats">
+        <span>{{ stat.icon }}</span>
+        <p>{{ stat.title }}</p>
+        <h2>{{ stat.value }}</h2>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Quick Actions</h2>
+
+      <div class="actions">
+        <button routerLink="/user-dashboard">
+          Open Analyzer →
+        </button>
+        <button (click)="logout()" class="secondary">
+          Sign Out
+        </button>
+      </div>
+
+      <p class="note">
+        User statistics will appear here after connecting the admin
+        dashboard to your backend APIs.
+      </p>
+    </section>
+  </main>
+</div>

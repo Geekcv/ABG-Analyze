@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 type Unit = 'mmHg' | 'kPa' | 'mmol/L' | 'mEq/L' | 'g/dL' | 'g/L';
 type Field = 'ph' | 'paco2' | 'hco3' | 'sodium' | 'chloride' | 'albumin';
@@ -39,6 +39,22 @@ export class HomeComponent {
   errors: Partial<Record<Field, string>> = {};
 
   currentYear = new Date().getFullYear();
+
+
+  constructor(private router: Router) {
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+
+  if (token && role === 'ADMIN') {
+    this.router.navigate(['/admin-dashboard'], {
+      replaceUrl: true
+    });
+  } else if (token && role === 'USER') {
+    this.router.navigate(['/user-dashboard'], {
+      replaceUrl: true
+    });
+  }
+}
 
   get ranges(): Record<Field, string> {
     return {

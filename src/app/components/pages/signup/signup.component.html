@@ -1,4 +1,27 @@
 
+<div
+  *ngIf="message"
+  class="top-notification"
+  [ngClass]="messageType"
+  role="alert"
+  aria-live="polite"
+>
+  <span class="notification-icon">
+    {{ messageType === 'success' ? '✓' : '!' }}
+  </span>
+
+  <span class="notification-text">{{ message }}</span>
+
+  <button
+    type="button"
+    class="notification-close"
+    (click)="message = ''"
+    aria-label="Close notification"
+  >
+    &times;
+  </button>
+</div>
+
 <div class="signup-page">
   <header class="signup-navbar">
     <a class="signup-brand" routerLink="/">
@@ -168,11 +191,11 @@
           *ngIf="submitted && !acceptTerms">
           Please accept the terms to continue.
         </small>
-
-        <button class="signup-submit" type="submit">
-          Create Account
-          <span aria-hidden="true">→</span>
-        </button>
+        
+<button class="signup-submit" type="submit" [disabled]="isLoading">
+  {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+  <span aria-hidden="true">{{ isLoading ? '...' : '→' }}</span>
+</button>
       </form>
 
       <p class="signup-note">
