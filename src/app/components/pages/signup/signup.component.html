@@ -1,0 +1,193 @@
+
+<div class="signup-page">
+  <header class="signup-navbar">
+    <a class="signup-brand" routerLink="/">
+      <img src="/logo.ico" alt="Kirti Classess logo" />
+      <span>Kirti Classess</span>
+    </a>
+
+    <a class="back-link" routerLink="/">← Back to Analyzer</a>
+  </header>
+
+  <main class="signup-main">
+    <section class="signup-card">
+      <div class="signup-heading">
+        <div class="signup-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+              fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round"/>
+            <circle cx="10" cy="7" r="4"
+              fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M19 8v6m-3-3h6"
+              fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <h1>Create your account</h1>
+        <p>Join Kirti Classess and get started.</p>
+      </div>
+
+      <form #signupForm="ngForm" (ngSubmit)="onSignup()" novalidate>
+        <div class="signup-field">
+          <label for="fullName">Full name</label>
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            [(ngModel)]="fullName"
+            #nameModel="ngModel"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            required
+            minlength="2"
+          />
+          <small class="field-error"
+            *ngIf="nameModel.invalid && (nameModel.touched || submitted)">
+            Please enter your name (at least 2 characters).
+          </small>
+        </div>
+
+        <div class="signup-field">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            #emailModel="ngModel"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            email
+          />
+          <small class="field-error"
+            *ngIf="emailModel.invalid && (emailModel.touched || submitted)">
+            Enter a valid email address.
+          </small>
+        </div>
+
+        <div class="signup-field">
+          <label for="phone">Mobile number</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            [(ngModel)]="phone"
+            #phoneModel="ngModel"
+            placeholder="10-digit mobile number"
+            autocomplete="tel"
+            inputmode="numeric"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required
+          />
+          <small class="field-error"
+            *ngIf="phoneModel.invalid && (phoneModel.touched || submitted)">
+            Enter a valid 10-digit mobile number.
+          </small>
+        </div>
+
+        <div class="signup-field">
+          <label for="password">Password</label>
+          <div class="password-control">
+            <input
+              id="password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              #passwordModel="ngModel"
+              placeholder="At least 8 characters"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            />
+            <button
+              type="button"
+              class="show-password"
+              (click)="showPassword = !showPassword"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+          <small class="field-error"
+            *ngIf="passwordModel.invalid && (passwordModel.touched || submitted)">
+            Password must contain at least 8 characters.
+          </small>
+        </div>
+
+        <div class="signup-field">
+          <label for="confirmPassword">Confirm password</label>
+          <div class="password-control">
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              [(ngModel)]="confirmPassword"
+              #confirmModel="ngModel"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              required
+            />
+            <button
+              type="button"
+              class="show-password"
+              (click)="showConfirmPassword = !showConfirmPassword"
+            >
+              {{ showConfirmPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+          <small class="field-error"
+            *ngIf="confirmModel.touched && confirmPassword && password !== confirmPassword">
+            Passwords do not match.
+          </small>
+          <small class="field-error"
+            *ngIf="submitted && !confirmPassword">
+            Please confirm your password.
+          </small>
+          <small class="field-error"
+            *ngIf="submitted && confirmPassword && password !== confirmPassword">
+            Passwords do not match.
+          </small>
+        </div>
+
+        <label class="terms-row">
+          <input
+            type="checkbox"
+            name="acceptTerms"
+            [(ngModel)]="acceptTerms"
+            required
+          />
+          <span>
+            I agree to the Terms and Conditions and Privacy Policy.
+          </span>
+        </label>
+
+        <small class="field-error terms-error"
+          *ngIf="submitted && !acceptTerms">
+          Please accept the terms to continue.
+        </small>
+
+        <button class="signup-submit" type="submit">
+          Create Account
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <p class="signup-note">
+        Your account will be created after secure server-side
+        registration is connected.
+      </p>
+
+      <div class="signup-footer">
+        <span>Already have an account?</span>
+        <a routerLink="/login">Sign in</a>
+      </div>
+    </section>
+
+    <p class="signup-copyright">
+      © {{ currentYear }} Kirti Classess. All rights reserved.
+    </p>
+  </main>
+</div>
