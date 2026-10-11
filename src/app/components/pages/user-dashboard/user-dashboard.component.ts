@@ -13,6 +13,8 @@ import { Router, RouterLink } from '@angular/router';
 export class UserDashboardComponent {
   userName = localStorage.getItem('name') || 'User';
 
+  currentYear = new Date().getFullYear();
+
   constructor(private router: Router) {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');

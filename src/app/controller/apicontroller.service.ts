@@ -34,6 +34,18 @@ export class ApicontrollerService {
     return resp;
   }
 
+  
+async getAllUsers(url: string = 'common/') {
+  const data = {
+    fn: 'common_fn',
+    se: 'fetch_user',
+    data: {}
+  };
+
+  return await this.apiService.postUrl(data, url);
+}
+
+
    
 }
 

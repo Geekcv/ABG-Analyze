@@ -1,42 +1,196 @@
-
 <div class="user-page">
-  <header class="navbar">
-    <a routerLink="/" class="brand">🩺 ABG Analyzer</a>
 
-    <div class="nav-actions">
-      <span class="user-label">{{ userName }}</span>
-      <button (click)="logout()">Logout</button>
+  <!-- Navbar -->
+  <header class="navbar">
+    <a routerLink="/" class="brand">
+      <span class="brand-icon">🩺</span>
+      <span>ABG<span class="brand-highlight">Analyzer</span></span>
+    </a>
+
+    <div class="nav-right">
+      <div class="user-profile">
+        <div class="avatar">
+          {{ userName ? userName.charAt(0).toUpperCase() : 'U' }}
+        </div>
+
+        <div class="profile-details">
+          <span class="profile-name">{{ userName }}</span>
+          <span class="profile-role">Standard User</span>
+        </div>
+      </div>
+
+      <button class="logout-btn" (click)="logout()">
+        <span>↪</span>
+        Logout
+      </button>
     </div>
   </header>
 
+  <!-- Main Content -->
   <main class="content">
-    <section class="welcome">
-      <p class="eyebrow">YOUR WORKSPACE</p>
-      <h1>Welcome, {{ userName }} 👋</h1>
-      <p>Analyze arterial blood gas reports from one place.</p>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+      <div class="welcome-text">
+        <span class="eyebrow">
+          <span class="status-dot"></span>
+          YOUR PERSONAL WORKSPACE
+        </span>
+
+        <h1>
+          Welcome back, <span>{{ userName }}</span>!
+        </h1>
+
+        <p>
+          Manage your ABG analysis workflow and access your workspace
+          from one convenient place.
+        </p>
+      </div>
+
+      <div class="welcome-illustration">
+        <div class="illustration-circle">
+          <span>🩺</span>
+        </div>
+        <div class="floating-badge">✚ Healthcare</div>
+      </div>
     </section>
 
-    <section class="analyzer-card">
-      <div class="icon-box">🩺</div>
-      <h2>ABG Analyzer</h2>
-      <p>
-        Open the analyzer to enter your ABG values and review
-        the available analysis.
-      </p>
-      <a routerLink="/">Open ABG Analyzer →</a>
+    <!-- Quick Stats -->
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <div class="stat-icon teal">🧪</div>
+        <div class="stat-info">
+          <span class="stat-label">Total Analyses</span>
+          <h2>--</h2>
+          <p>Analysis records</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon blue">📋</div>
+        <div class="stat-info">
+          <span class="stat-label">Recent Reports</span>
+          <h2>--</h2>
+          <p>Recent activity</p>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon purple">👤</div>
+        <div class="stat-info">
+          <span class="stat-label">Account</span>
+          <h2 class="account-status">Active</h2>
+          <p>Your workspace status</p>
+        </div>
+      </article>
+
     </section>
 
-    <section class="info-card">
-      <h2>Recent Analysis</h2>
-      <p>
-        Your analysis history will appear here after history storage
-        is connected to the backend.
-      </p>
+    <!-- Analyzer Section -->
+    <section class="section-heading">
+      <div>
+        <span class="section-eyebrow">GET STARTED</span>
+        <h2>Your Workspace</h2>
+        <p>Choose a tool to continue your work.</p>
+      </div>
     </section>
 
-    <p class="disclaimer">
-      ABG analysis is a clinical decision-support aid, not a substitute
-      for assessment by a qualified healthcare professional.
-    </p>
+    <section class="workspace-grid">
+
+      <!-- Main Analyzer Card -->
+      <article class="analyzer-card">
+        <div class="card-top">
+          <div class="analyzer-icon">🩺</div>
+          <span class="available-badge">
+            <span></span>
+            Available
+          </span>
+        </div>
+
+        <div class="analyzer-content">
+          <span class="card-category">CLINICAL TOOL</span>
+          <h2>ABG Analyzer</h2>
+
+          <p>
+            Enter arterial blood gas values and review the available
+            interpretation to support your clinical workflow.
+          </p>
+
+          <div class="feature-list">
+            <div>
+              <span class="check-icon">✓</span>
+              ABG value entry
+            </div>
+            <div>
+              <span class="check-icon">✓</span>
+              Analysis overview
+            </div>
+            <div>
+              <span class="check-icon">✓</span>
+              Easy-to-use interface
+            </div>
+          </div>
+
+          <a routerLink="/" class="primary-btn">
+            Open ABG Analyzer
+            <span>→</span>
+          </a>
+        </div>
+
+        <div class="card-decoration"></div>
+      </article>
+
+      <!-- Recent Activity -->
+      <article class="activity-card">
+        <div class="activity-header">
+          <div>
+            <span class="section-eyebrow">YOUR ACTIVITY</span>
+            <h2>Recent Analysis</h2>
+          </div>
+
+          <div class="activity-icon">📊</div>
+        </div>
+
+        <div class="empty-state">
+          <div class="empty-icon">
+            <span>📄</span>
+          </div>
+
+          <h3>No analysis history yet</h3>
+
+          <p>
+            Your previous analyses will appear here once history storage
+            is connected to the backend.
+          </p>
+
+          <a routerLink="/" class="secondary-btn">
+            Start your first analysis
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Information Banner -->
+    <section class="info-banner">
+      <div class="info-symbol">ⓘ</div>
+      <div>
+        <h3>Important medical information</h3>
+        <p>
+          ABG analysis is a clinical decision-support aid. Results must be
+          interpreted alongside the patient's clinical condition by a
+          qualified healthcare professional. Do not use this tool alone
+          to make treatment decisions.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>© {{ currentYear }} Kirti Classess. All rights reserved.</span>
+      <span>Built for a better healthcare workflow</span>
+    </footer>
+
   </main>
 </div>
