@@ -1,0 +1,459 @@
+<header class="navbar">
+  
+  
+<header class="navbar">
+  <div class="nav-content">
+    <a class="logo" routerLink="/" aria-label="Kirti Classess home">
+      <img src="/logo.ico" alt="Kirti Classess logo" />
+    </a>
+
+    <span class="brand">ABG Analyzer</span>
+
+    <nav class="nav-links">
+      <a routerLink="/">Home</a>
+      <a href="#instructions">Instructions</a>
+      <a href="#results">Results</a>
+    </nav>
+
+    <a class="login-btn" routerLink="/login">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+          fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M4 21a8 8 0 0 1 16 0"
+          fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"/>
+      </svg>
+      <span>Login</span>
+    </a>
+  </div>
+</header>
+
+
+</header>
+
+<div class="page-layout">
+  <main class="calculator-section">
+    <!-- Page Heading -->
+    <div class="page-title">
+      <span class="page-brand">Kirti Raj</span>
+      <h1>Arterial Blood Gas (ABG) Analyzer</h1>
+      <p>Interprets arterial blood gas values.</p>
+    </div>
+
+    <!-- Instructions -->
+    <section class="instructions" id="instructions">
+      <h3>
+        <span class="info-icon">ⓘ</span>
+        Instructions
+      </h3>
+      <p>
+        This analyzer should not substitute for clinical context. Sodium and
+        chloride are required for anion gap calculation.
+      </p>
+    </section>
+
+    <!-- Information Tabs -->
+    <div class="info-tabs">
+      <a href="#instructions">Elements </a>
+      <a href="#related">Value </a>
+      <a href="#results">Units </a>
+    </div>
+
+    <form #abgForm="ngForm" (ngSubmit)="calculate()" novalidate>
+      <!-- pH -->
+      <div class="form-row">
+        <label for="ph">pH</label>
+
+        <div class="field-control">
+          <input
+            id="ph"
+            name="ph"
+            type="number"
+            [(ngModel)]="ph"
+            (ngModelChange)="validateField('ph')"
+            placeholder="Norm: 7.35 - 7.45"
+            min="0"
+            max="14"
+            step="0.01"
+            [class.invalid-input]="!!errors.ph"
+            required
+          />
+
+          <small class="error" *ngIf="errors.ph">
+            {{ errors.ph }}
+          </small>
+
+          <small class="warning" *ngIf="!errors.ph && referenceWarnings.ph">
+            {{ referenceWarnings.ph }}
+          </small>
+        </div>
+      </div>
+
+      <!-- PaCO2 -->
+      <div class="form-row">
+        <label for="paco2">PaCO₂</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="paco2"
+              name="paco2"
+              type="number"
+              [(ngModel)]="paco2"
+              (ngModelChange)="validateField('paco2')"
+              [placeholder]="'Norm: ' + ranges.paco2"
+              step="0.01"
+              [class.invalid-input]="!!errors.paco2"
+              required
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('paco2')"
+              [attr.aria-label]="
+                'Change PaCO2 unit. Current unit: ' + units.paco2
+              "
+              title="Change unit"
+            >
+              {{ units.paco2 }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.paco2">
+            {{ errors.paco2 }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.paco2 && referenceWarnings.paco2"
+          >
+            {{ referenceWarnings.paco2 }}
+          </small>
+        </div>
+      </div>
+
+      <!-- HCO3 -->
+      <div class="form-row">
+        <label for="hco3">HCO₃⁻</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="hco3"
+              name="hco3"
+              type="number"
+              [(ngModel)]="hco3"
+              (ngModelChange)="validateField('hco3')"
+              [placeholder]="'Norm: ' + ranges.hco3"
+              step="0.1"
+              [class.invalid-input]="!!errors.hco3"
+              required
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('hco3')"
+              title="Change unit"
+            >
+              {{ units.hco3 }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.hco3">
+            {{ errors.hco3 }}
+          </small>
+
+          <small class="warning" *ngIf="!errors.hco3 && referenceWarnings.hco3">
+            {{ referenceWarnings.hco3 }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Sodium -->
+      <div class="form-row">
+        <label for="sodium">Sodium</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="sodium"
+              name="sodium"
+              type="number"
+              [(ngModel)]="sodium"
+              (ngModelChange)="validateField('sodium')"
+              [placeholder]="'Norm: ' + ranges.sodium"
+              step="0.1"
+              [class.invalid-input]="!!errors.sodium"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('sodium')"
+              title="Change unit"
+            >
+              {{ units.sodium }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.sodium">
+            {{ errors.sodium }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.sodium && referenceWarnings.sodium"
+          >
+            {{ referenceWarnings.sodium }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Chloride -->
+      <div class="form-row">
+        <label for="chloride">Chloride</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="chloride"
+              name="chloride"
+              type="number"
+              [(ngModel)]="chloride"
+              (ngModelChange)="validateField('chloride')"
+              [placeholder]="'Norm: ' + ranges.chloride"
+              step="0.1"
+              [class.invalid-input]="!!errors.chloride"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('chloride')"
+              title="Change unit"
+            >
+              {{ units.chloride }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.chloride">
+            {{ errors.chloride }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.chloride && referenceWarnings.chloride"
+          >
+            {{ referenceWarnings.chloride }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Albumin -->
+      <div class="form-row albumin-row">
+        <div class="field-label">
+          <label for="albumin">Albumin</label>
+          <small class="field-note">
+            Normal albumin is typically around 4 g/dL or 40 g/L.
+          </small>
+        </div>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="albumin"
+              name="albumin"
+              type="number"
+              [(ngModel)]="albumin"
+              (ngModelChange)="validateField('albumin')"
+              [placeholder]="'Norm: ' + ranges.albumin"
+              step="0.1"
+              [class.invalid-input]="!!errors.albumin"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('albumin')"
+              title="Change unit"
+            >
+              {{ units.albumin }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.albumin">
+            {{ errors.albumin }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.albumin && referenceWarnings.albumin"
+          >
+            {{ referenceWarnings.albumin }}
+          </small>
+        </div>
+      </div>
+
+      <button class="calculate-btn" type="submit">Calculate ABG</button>
+    </form>
+
+    <!-- Results -->
+    <section class="result-panel" id="results">
+      <div class="result-header">
+        <h2>Result:</h2>
+
+        <span *ngIf="!result"> Please fill out required fields. </span>
+      </div>
+
+      <div class="result-content" *ngIf="result">
+        <h3>Final Result:- {{ result }}</h3>
+
+        <div class="result-item" *ngIf="anionGap !== null">
+          <span>Anion Gap</span>
+          <strong>{{ anionGap }} mmol/L</strong>
+        </div>
+
+        <div class="result-item" *ngIf="correctedAnionGap !== null">
+          <span>Albumin-corrected Anion Gap</span>
+          <strong>{{ correctedAnionGap }} mmol/L</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <!-- Brand and Founder -->
+    <div class="footer-brand">
+      <h2>Kirti Classess</h2>
+
+      <p>
+        Learning today, leading tomorrow. Your trusted destination for quality
+        education.
+      </p>
+
+      <div class="founder-profile">
+        <img
+          src="/kirti-founder.jpg"
+          alt="Kirti, Founder of Kirti Classess"
+          class="founder-image"
+        />
+
+        <div class="founder-info">
+          <span class="founder-label">FOUNDER</span>
+          <h3>Kirti Raj (Nursing officer)</h3>
+          <p>Founder of Kirti Classess</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact and Social Media -->
+    <div class="footer-column">
+      <h3>Connect With Us</h3>
+
+      <a
+        class="contact-link whatsapp-link"
+        href="https://wa.me/7568378490"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.5 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.4-1.7a12 12 0 0 0 5.7 1.5h.1c6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.3-6.2-3.6-8.4ZM12.1 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.8 1 1-3.7-.3-.4a9.8 9.8 0 0 1-1.5-5.2c0-5.5 4.5-10 10-10a9.9 9.9 0 0 1 7.1 2.9 9.9 9.9 0 0 1 2.9 7.1c0 5.4-4.5 9.9-10 9.9Zm5.5-7.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2-.4.2-.7.1c-.3-.2-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6s-.7-1.6-1-2.2c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.2 3.2c.2.2 2.2 3.4 5.3 4.7.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.5Z"
+          />
+        </svg>
+        <span>WhatsApp</span>
+        <span class="external-icon">↗</span>
+      </a>
+
+      <a
+        class="contact-link instagram-link"
+        href="https://www.instagram.com/rn_kirti_raj/?hl=en"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="3"
+            y="3"
+            width="18"
+            height="18"
+            rx="5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <circle
+            cx="12"
+            cy="12"
+            r="4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+        </svg>
+        <span>Instagram</span>
+        <span class="external-icon">↗</span>
+      </a>
+
+      <a class="contact-link" href="mailto:rajkirti783@gmail.com">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="2"
+            y="4"
+            width="20"
+            height="16"
+            rx="2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="m3 6 9 7 9-7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </svg>
+        <span>Email Us</span>
+      </a>
+
+      <a class="contact-link" href="tel:+917568378490">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2 11 11 0 0 0 3.5.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17.9 17.9 0 0 1 3 3a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1A11 11 0 0 0 9 6.5a1 1 0 0 1-.2 1Z"
+          />
+        </svg>
+        <span>7568378490</span>
+      </a>
+    </div>
+
+    <!-- Address -->
+    <div class="footer-column">
+      <h3>Our Address</h3>
+      <div class="address-info">
+        <span class="address-icon" aria-hidden="true">⌖</span>
+        <p>
+          Mohini Nagar Main Mandore Road <br />
+          Jodhpur Rajasthan, 342304, India
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} Kirti Classess. All rights reserved.</p>
+    <p>Designed with care for our learners.</p>
+  </div>
+</footer>
