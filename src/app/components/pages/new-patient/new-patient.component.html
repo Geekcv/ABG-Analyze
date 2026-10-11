@@ -1,0 +1,148 @@
+
+<div class="patient-page">
+  <a routerLink="/patient-blood-sugar" class="back-link">
+    ← Back to Patient Dashboard
+  </a>
+
+  <header class="page-header">
+    <span class="eyebrow">PATIENT MANAGEMENT</span>
+    <h1>Register New Patient</h1>
+    <p>Enter patient information to continue with blood sugar analysis.</p>
+  </header>
+
+  <form class="patient-form" #patientForm="ngForm"
+        (ngSubmit)="savePatient(patientForm)">
+
+    <div class="form-section">
+      <h2>Personal Information</h2>
+      <p class="section-description">Basic details of the patient.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Patient Name <span>*</span></label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            [(ngModel)]="patient.name"
+            placeholder="Enter full name"
+            required
+            maxlength="100"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="age">Age <span>*</span></label>
+          <input
+            id="age"
+            name="age"
+            type="number"
+            [(ngModel)]="patient.age"
+            placeholder="Enter age"
+            min="0"
+            max="120"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="gender">Gender <span>*</span></label>
+          <select
+            id="gender"
+            name="gender"
+            [(ngModel)]="patient.gender"
+            required
+          >
+            <option value="" disabled>Select gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Hospital Information</h2>
+      <p class="section-description">Patient admission and bed details.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="ipdNo">IPD Number <span>*</span></label>
+          <input
+            id="ipdNo"
+            name="ipdNo"
+            type="text"
+            [(ngModel)]="patient.ipdNo"
+            placeholder="Enter IPD number"
+            required
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="bedNo">Bed Number <span>*</span></label>
+          <input
+            id="bedNo"
+            name="bedNo"
+            type="text"
+            [(ngModel)]="patient.bedNo"
+            placeholder="Enter bed number"
+            required
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="diagnosis">Diagnosis <span>*</span></label>
+          <textarea
+            id="diagnosis"
+            name="diagnosis"
+            [(ngModel)]="patient.diagnosis"
+            placeholder="Enter diagnosis or provisional diagnosis"
+            rows="3"
+            required
+            maxlength="2000"
+          ></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="oldHistory">Old Medical History</label>
+          <textarea
+            id="oldHistory"
+            name="oldHistory"
+            [(ngModel)]="patient.oldHistory"
+            placeholder="Previous illnesses, medical conditions, medications, allergies..."
+            rows="4"
+            maxlength="5000"
+          ></textarea>
+          <small>Optional — enter relevant past medical history.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <p><span>*</span> Required fields</p>
+
+      <div class="form-actions">
+        <button type="button" class="secondary-btn"
+                (click)="resetForm(patientForm)">
+          Clear Form
+        </button>
+
+        <button type="submit" class="primary-btn"
+                [disabled]="patientForm.invalid || saving">
+          {{ saving ? 'Saving...' : 'Save Patient →' }}
+        </button>
+      </div>
+    </div>
+
+    <p *ngIf="message" class="success-message" role="status">
+      {{ message }}
+    </p>
+
+    <p *ngIf="errorMessage" class="error-message" role="alert">
+      {{ errorMessage }}
+    </p>
+  </form>
+</div>

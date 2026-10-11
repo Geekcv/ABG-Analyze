@@ -5,6 +5,9 @@ import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { SignupComponent } from './components/pages/signup/signup.component';
 import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component';
 import { UserDashboardComponent } from './components/pages/user-dashboard/user-dashboard.component';
+import { PatientBloodSugarComponent } from './components/pages/patient-blood-sugar/patient-blood-sugar.component';
+import { OldPatientsComponent } from './components/pages/old-patients/old-patients.component';
+import { NewPatientComponent } from './components/pages/new-patient/new-patient.component';
 
 export const routes: Routes = [
 
@@ -21,6 +24,18 @@ export const routes: Routes = [
       { path: 'signup', component: SignupComponent },
        { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'user-dashboard', component: UserDashboardComponent },
+   {
+    path: 'patient-blood-sugar',
+    component: PatientBloodSugarComponent
+  },
+  {
+    path: 'old-patients',
+    component: OldPatientsComponent
+  },
+  {
+    path: 'new-patient',
+    component: NewPatientComponent
+  },
 
   {
     path: '**',

@@ -1,0 +1,124 @@
+<div class="patient-page">
+  <a routerLink="/patient-blood-sugar" class="back-link">
+    ← Back to Patient Dashboard
+  </a>
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">PATIENT MANAGEMENT</span>
+      <h1>Old Patients</h1>
+      <p>Select an existing patient to continue with blood sugar analysis.</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="fetchPatients()"
+      [disabled]="loading">
+      {{ loading ? 'Loading...' : '↻ Refresh' }}
+    </button>
+  </header>
+
+  <section class="patient-toolbar">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        type="text"
+        name="searchText"
+        [(ngModel)]="searchText"
+        placeholder="Search by name, patient ID, IPD or bed number..."
+        aria-label="Search patients">
+    </div>
+
+    <div class="patient-count">
+      <strong>{{ filteredPatients.length }}</strong>
+      <span>patient{{ filteredPatients.length !== 1 ? 's' : '' }}</span>
+    </div>
+  </section>
+
+  <div *ngIf="loading" class="state-card">
+    <div class="loader"></div>
+    <p>Fetching patients from database...</p>
+  </div>
+
+  <div *ngIf="!loading && errorMessage" class="state-card error-state">
+    <h3>Unable to load patients</h3>
+    <p>{{ errorMessage }}</p>
+    <button type="button" class="primary-btn" (click)="fetchPatients()">
+      Try Again
+    </button>
+  </div>
+
+  <div
+    *ngIf="!loading && !errorMessage && patients.length === 0"
+    class="state-card">
+    <div class="empty-icon">♧</div>
+    <h3>No patients found</h3>
+    <p>No patient records are currently available in the database.</p>
+  </div>
+
+  <div
+    *ngIf="!loading && !errorMessage &&
+           patients.length > 0 && filteredPatients.length === 0"
+    class="state-card">
+    <h3>No matching patients</h3>
+    <p>Try searching with another name, patient ID, IPD number or bed number.</p>
+  </div>
+
+  <section
+    *ngIf="!loading && !errorMessage && filteredPatients.length > 0"
+    class="patient-grid">
+
+    <article
+      class="patient-card"
+      *ngFor="let patient of filteredPatients; trackBy: trackByPatientId">
+
+      <div class="card-header">
+        <div class="avatar">
+          {{ patient.name?.charAt(0)?.toUpperCase() || 'P' }}
+        </div>
+
+        <div class="patient-heading">
+          <h2>{{ patient.name }}</h2>
+          <span class="patient-id">
+            ID: {{ patient.row_id || patient.id }}
+          </span>
+        </div>
+      </div>
+
+      <div class="patient-details">
+        <div class="detail-item">
+          <span>Age</span>
+          <strong>{{ patient.age }} years</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Gender</span>
+          <strong>{{ patient.gender || '—' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>IPD Number</span>
+          <strong>{{ patient.ipd_no || '—' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Bed Number</span>
+          <strong>{{ patient.bed_no || '—' }}</strong>
+        </div>
+
+        <div class="detail-item full-width">
+          <span>Diagnosis</span>
+          <p>{{ patient.diagnosis || 'Not provided' }}</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="select-btn"
+        (click)="selectPatient(patient)">
+        Select Patient <span>→</span>
+      </button>
+    </article>
+  </section>
+</div>

@@ -1,0 +1,40 @@
+
+<div class="patient-page">
+  <header class="page-header">
+    <a routerLink="/user-dashboard" class="back-link">
+      ← Back to Dashboard
+    </a>
+
+    <span class="eyebrow">PATIENT MANAGEMENT</span>
+    <h1>Patient Blood Sugar Analyzer</h1>
+    <p>Choose an option to continue.</p>
+  </header>
+
+  <section class="patient-grid">
+    <article class="patient-card">
+      <div class="card-icon old">👥</div>
+      <h2>Old Patient</h2>
+      <p>
+        View existing patients, select a patient and continue
+        with their blood sugar analysis.
+      </p>
+
+      <a routerLink="/old-patients" class="primary-btn">
+        View Patient List →
+      </a>
+    </article>
+
+    <article class="patient-card">
+      <div class="card-icon new">➕</div>
+      <h2>New Patient</h2>
+      <p>
+        Register a new patient and enter their details
+        before starting an analysis.
+      </p>
+
+      <a routerLink="/new-patient" class="primary-btn">
+        Add New Patient →
+      </a>
+    </article>
+  </section>
+</div>
