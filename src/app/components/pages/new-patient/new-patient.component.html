@@ -93,6 +93,29 @@
           />
         </div>
 
+        <div class="form-group">
+  <label for="admittedAt">Admission Date & Time <span>*</span></label>
+  <input
+    id="admittedAt"
+    name="admittedAt"
+    type="datetime-local"
+    [(ngModel)]="patient.admittedAt"
+    required
+  />
+</div>
+
+<div class="form-group">
+  <label for="dischargedAt">Discharge Date & Time</label>
+  <input
+    id="dischargedAt"
+    name="dischargedAt"
+    type="datetime-local"
+    [(ngModel)]="patient.dischargedAt"
+    [min]="patient.admittedAt"
+  />
+  <small>Optional — leave empty if the patient is still admitted.</small>
+</div>
+
         <div class="form-group full-width">
           <label for="diagnosis">Diagnosis <span>*</span></label>
           <textarea

@@ -43,8 +43,6 @@ export class ApicontrollerService {
     return await this.apiService.postUrl(data, url);
   }
 
-  
-
   async getAllpatient(url: string = 'common/') {
     const data = {
       fn: 'common_fn',
@@ -59,9 +57,19 @@ export class ApicontrollerService {
     const data = {
       fn: 'common_fn',
       se: 'cr_pat',
-      data: payload 
+      data: payload,
     };
 
     return await this.apiService.postUrl(data, url);
+  }
+
+  async Deletepatient(data: any, url: string = 'common/') {
+    const payload = {
+      fn: 'common_fn',
+      se: 'del_pat',
+      data: data,
+    };
+
+    return await this.apiService.postUrl(payload, url);
   }
 }

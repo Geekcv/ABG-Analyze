@@ -13,8 +13,9 @@ interface Patient {
   bedNo: string;
   diagnosis: string;
   oldHistory: string;
+  admittedAt: string;
+  dischargedAt: string;
 }
-
 @Component({
   selector: 'app-new-patient',
   standalone: true,
@@ -36,16 +37,27 @@ export class NewPatientComponent {
   ) {}
 
   private emptyPatient(): Patient {
-    return {
-      name: '',
-      age: null,
-      gender: '',
-      ipdNo: '',
-      bedNo: '',
-      diagnosis: '',
-      oldHistory: ''
-    };
-  }
+  return {
+    name: '',
+    age: null,
+    gender: '',
+    ipdNo: '',
+    bedNo: '',
+    diagnosis: '',
+    oldHistory: '',
+    admittedAt: this.getCurrentDateTime(),
+    dischargedAt: ''
+  };
+}
+
+private getCurrentDateTime(): string {
+  const now = new Date();
+  const localDate = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+  );
+
+  return localDate.toISOString().slice(0, 16);
+}
 
  async savePatient(form: NgForm) {
   this.message = '';
@@ -61,14 +73,20 @@ export class NewPatientComponent {
 
   try {
     const payload = {
-      name: this.patient.name.trim(),
-      age: this.patient.age,
-      gender: this.patient.gender,
-      ipdNo: this.patient.ipdNo.trim(),
-      bedNo: this.patient.bedNo.trim(),
-      diagnosis: this.patient.diagnosis.trim(),
-      oldHistory: this.patient.oldHistory.trim()
-    };
+  name: this.patient.name.trim(),
+  age: this.patient.age,
+  gender: this.patient.gender,
+  ipdNo: this.patient.ipdNo.trim(),
+  bedNo: this.patient.bedNo.trim(),
+  diagnosis: this.patient.diagnosis.trim(),
+  oldHistory: this.patient.oldHistory.trim(),
+  admittedAt: this.patient.admittedAt
+    ? new Date(this.patient.admittedAt).toISOString()
+    : null,
+  dischargedAt: this.patient.dischargedAt
+    ? new Date(this.patient.dischargedAt).toISOString()
+    : null
+};
 
     const resp = await this.Apicontroller.Addpatient(payload);
 

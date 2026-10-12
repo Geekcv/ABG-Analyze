@@ -14,11 +14,13 @@
       type="button"
       class="refresh-btn"
       (click)="fetchPatients()"
-      [disabled]="loading">
-      {{ loading ? 'Loading...' : '↻ Refresh' }}
+      [disabled]="loading"
+    >
+      {{ loading ? "Loading..." : "↻ Refresh" }}
     </button>
   </header>
 
+  <!-- Search and Date Filters -->
   <section class="patient-toolbar">
     <div class="search-box">
       <span class="search-icon">⌕</span>
@@ -27,55 +29,93 @@
         name="searchText"
         [(ngModel)]="searchText"
         placeholder="Search by name, patient ID, IPD or bed number..."
-        aria-label="Search patients">
+        aria-label="Search patients"
+      />
     </div>
+
+    <div class="date-filter">
+      <label for="fromDate">Admission From</label>
+      <input
+        id="fromDate"
+        name="fromDate"
+        type="datetime-local"
+        [(ngModel)]="fromDate"
+      />
+    </div>
+
+    <div class="date-filter">
+      <label for="toDate">Admission To</label>
+      <input
+        id="toDate"
+        name="toDate"
+        type="datetime-local"
+        [(ngModel)]="toDate"
+        [min]="fromDate"
+      />
+    </div>
+
+    <button type="button" class="refresh-btn" (click)="clearFilters()">
+      Clear Filters
+    </button>
 
     <div class="patient-count">
       <strong>{{ filteredPatients.length }}</strong>
-      <span>patient{{ filteredPatients.length !== 1 ? 's' : '' }}</span>
+      <span>patient{{ filteredPatients.length !== 1 ? "s" : "" }}</span>
     </div>
   </section>
 
+  <!-- Loading -->
   <div *ngIf="loading" class="state-card">
     <div class="loader"></div>
     <p>Fetching patients from database...</p>
   </div>
 
+  <!-- Error -->
   <div *ngIf="!loading && errorMessage" class="state-card error-state">
     <h3>Unable to load patients</h3>
     <p>{{ errorMessage }}</p>
+
     <button type="button" class="primary-btn" (click)="fetchPatients()">
       Try Again
     </button>
   </div>
 
+  <!-- No Patients -->
   <div
     *ngIf="!loading && !errorMessage && patients.length === 0"
-    class="state-card">
+    class="state-card"
+  >
     <div class="empty-icon">♧</div>
     <h3>No patients found</h3>
     <p>No patient records are currently available in the database.</p>
   </div>
 
+  <!-- No Matching Patients -->
   <div
-    *ngIf="!loading && !errorMessage &&
-           patients.length > 0 && filteredPatients.length === 0"
-    class="state-card">
+    *ngIf="
+      !loading &&
+      !errorMessage &&
+      patients.length > 0 &&
+      filteredPatients.length === 0
+    "
+    class="state-card"
+  >
     <h3>No matching patients</h3>
-    <p>Try searching with another name, patient ID, IPD number or bed number.</p>
+    <p>Try changing your search text or admission date-time range.</p>
   </div>
 
+  <!-- Patient Cards -->
   <section
     *ngIf="!loading && !errorMessage && filteredPatients.length > 0"
-    class="patient-grid">
-
+    class="patient-grid"
+  >
     <article
       class="patient-card"
-      *ngFor="let patient of filteredPatients; trackBy: trackByPatientId">
-
+      *ngFor="let patient of filteredPatients; trackBy: trackByPatientId"
+    >
       <div class="card-header">
         <div class="avatar">
-          {{ patient.name?.charAt(0)?.toUpperCase() || 'P' }}
+          {{ patient.name?.charAt(0)?.toUpperCase() || "P" }}
         </div>
 
         <div class="patient-heading">
@@ -94,31 +134,117 @@
 
         <div class="detail-item">
           <span>Gender</span>
-          <strong>{{ patient.gender || '—' }}</strong>
+          <strong>{{ patient.gender || "—" }}</strong>
         </div>
 
         <div class="detail-item">
           <span>IPD Number</span>
-          <strong>{{ patient.ipd_no || '—' }}</strong>
+          <strong>{{ patient.ipd_no || "—" }}</strong>
         </div>
 
         <div class="detail-item">
           <span>Bed Number</span>
-          <strong>{{ patient.bed_no || '—' }}</strong>
+          <strong>{{ patient.bed_no || "—" }}</strong>
         </div>
 
         <div class="detail-item full-width">
           <span>Diagnosis</span>
-          <p>{{ patient.diagnosis || 'Not provided' }}</p>
+          <p>{{ patient.diagnosis || "Not provided" }}</p>
+        </div>
+
+        <div class="detail-item full-width">
+          <span>Admission Date &amp; Time</span>
+          <strong>
+            {{
+              patient.admitted_at
+                ? (patient.admitted_at | date: "dd MMM yyyy, hh:mm a")
+                : "—"
+            }}
+          </strong>
+        </div>
+
+        <div class="detail-item full-width">
+          <span>Discharge Date &amp; Time</span>
+          <strong>
+            {{
+              patient.discharged_at
+                ? (patient.discharged_at | date: "dd MMM yyyy, hh:mm a")
+                : "Not discharged"
+            }}
+          </strong>
         </div>
       </div>
-
+      <!-- 
       <button
         type="button"
         class="select-btn"
         (click)="selectPatient(patient)">
         Select Patient <span>→</span>
-      </button>
+      </button> -->
+
+      <div class="patient-actions">
+        <!-- <button
+    type="button"
+    class="select-btn"
+    (click)="selectPatient(patient)">
+    Select Patient <span>→</span>
+  </button> -->
+
+        <button
+          type="button"
+          class="delete-btn"
+          (click)="deletePatient(patient)"
+          [disabled]="deletingPatientId === patient.id"
+        >
+          {{
+            deletingPatientId === patient.id
+              ? "Deleting..."
+              : "🗑 Delete Patient"
+          }}
+        </button>
+      </div>
     </article>
   </section>
+
+  <!-- Delete Confirmation Dialog -->
+  <div class="dialog-overlay" *ngIf="showDeleteDialog" (click)="cancelDelete()">
+    <div
+      class="delete-dialog"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="deleteDialogTitle"
+      aria-describedby="deleteDialogMessage"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="delete-dialog-icon">!</div>
+
+      <h2 id="deleteDialogTitle">Delete Patient?</h2>
+
+      <p id="deleteDialogMessage">
+        Are you sure you want to delete
+        <strong>{{ patientToDelete?.name }}</strong
+        >? This action cannot be undone.
+      </p>
+
+      <div class="dialog-actions">
+        <button
+          type="button"
+          class="cancel-dialog-btn"
+          (click)="cancelDelete()"
+          [disabled]="deletingPatientId !== null"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="confirm-delete-btn"
+          (click)="confirmDelete()"
+          [disabled]="deletingPatientId !== null"
+        >
+          {{ deletingPatientId !== null ? "Deleting..." : "Yes, Delete" }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
