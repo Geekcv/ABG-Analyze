@@ -8,6 +8,7 @@ import { UserDashboardComponent } from './components/pages/user-dashboard/user-d
 import { PatientBloodSugarComponent } from './components/pages/patient-blood-sugar/patient-blood-sugar.component';
 import { OldPatientsComponent } from './components/pages/old-patients/old-patients.component';
 import { NewPatientComponent } from './components/pages/new-patient/new-patient.component';
+import { AbgCalculatorComponent } from './components/pages/abg-calculator/abg-calculator.component';
 
 export const routes: Routes = [
 
@@ -35,6 +36,10 @@ export const routes: Routes = [
   {
     path: 'new-patient',
     component: NewPatientComponent
+  },
+  {
+    path: 'abg-calculator',
+    component: AbgCalculatorComponent
   },
 
   {

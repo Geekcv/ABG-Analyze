@@ -301,7 +301,20 @@
         </div>
       </div>
 
-      <button class="calculate-btn" type="submit">Calculate ABG</button>
+      <!-- <button class="calculate-btn" type="submit">Calculate ABG</button> -->
+
+      <button
+  class="calculate-btn"
+  type="submit"
+  [disabled]="!canCalculate">
+  {{ canCalculate ? 'Calculate ABG' : 'Login for More Calculations' }}
+</button>
+
+<p *ngIf="!isLoggedIn" class="usage-message">
+  Free calculations remaining:
+  <strong>{{ remainingFreeCalculations }}</strong> of
+  {{ freeCalculationLimit }}
+</p>
     </form>
 
     <!-- Results -->
@@ -327,6 +340,46 @@
       </div>
     </section>
   </main>
+  <div
+  class="login-overlay"
+  *ngIf="showLoginPrompt"
+  (click)="showLoginPrompt = false">
+
+  <section
+    class="login-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="limit-title"
+    (click)="$event.stopPropagation()">
+
+    <button
+      type="button"
+      class="close-btn"
+      aria-label="Close login prompt"
+      (click)="showLoginPrompt = false">
+      ×
+    </button>
+
+    <div class="lock-icon">🔒</div>
+
+    <h2 id="limit-title">Free Limit Reached</h2>
+
+    <p>
+      You have used your {{ freeCalculationLimit }} free ABG calculations.
+      Please log in or create an account to continue using the calculator.
+    </p>
+
+    <div class="modal-actions">
+      <a routerLink="/login" class="login-action">
+        Login
+      </a>
+
+      <a routerLink="/signup" class="signup-action">
+        Create Account
+      </a>
+    </div>
+  </section>
+</div>
 </div>
 
 <footer class="site-footer">

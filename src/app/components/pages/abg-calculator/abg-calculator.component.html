@@ -1,0 +1,278 @@
+<header class="navbar">
+  <a routerLink="/user-dashboard" class="back-btn">
+    <span>←</span>
+    <span>Back to Home</span>
+  </a>
+</header>
+
+<div class="page-layout">
+  <main class="calculator-section">
+    <form #abgForm="ngForm" (ngSubmit)="calculate()" novalidate>
+      <!-- pH -->
+      <div class="form-row">
+        <label for="ph">pH</label>
+
+        <div class="field-control">
+          <input
+            id="ph"
+            name="ph"
+            type="number"
+            [(ngModel)]="ph"
+            (ngModelChange)="validateField('ph')"
+            placeholder="Norm: 7.35 - 7.45"
+            min="0"
+            max="14"
+            step="0.01"
+            [class.invalid-input]="!!errors.ph"
+            required
+          />
+
+          <small class="error" *ngIf="errors.ph">
+            {{ errors.ph }}
+          </small>
+
+          <small class="warning" *ngIf="!errors.ph && referenceWarnings.ph">
+            {{ referenceWarnings.ph }}
+          </small>
+        </div>
+      </div>
+
+      <!-- PaCO2 -->
+      <div class="form-row">
+        <label for="paco2">PaCO₂</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="paco2"
+              name="paco2"
+              type="number"
+              [(ngModel)]="paco2"
+              (ngModelChange)="validateField('paco2')"
+              [placeholder]="'Norm: ' + ranges.paco2"
+              step="0.01"
+              [class.invalid-input]="!!errors.paco2"
+              required
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('paco2')"
+              [attr.aria-label]="
+                'Change PaCO2 unit. Current unit: ' + units.paco2
+              "
+              title="Change unit"
+            >
+              {{ units.paco2 }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.paco2">
+            {{ errors.paco2 }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.paco2 && referenceWarnings.paco2"
+          >
+            {{ referenceWarnings.paco2 }}
+          </small>
+        </div>
+      </div>
+
+      <!-- HCO3 -->
+      <div class="form-row">
+        <label for="hco3">HCO₃⁻</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="hco3"
+              name="hco3"
+              type="number"
+              [(ngModel)]="hco3"
+              (ngModelChange)="validateField('hco3')"
+              [placeholder]="'Norm: ' + ranges.hco3"
+              step="0.1"
+              [class.invalid-input]="!!errors.hco3"
+              required
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('hco3')"
+              title="Change unit"
+            >
+              {{ units.hco3 }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.hco3">
+            {{ errors.hco3 }}
+          </small>
+
+          <small class="warning" *ngIf="!errors.hco3 && referenceWarnings.hco3">
+            {{ referenceWarnings.hco3 }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Sodium -->
+      <div class="form-row">
+        <label for="sodium">Sodium</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="sodium"
+              name="sodium"
+              type="number"
+              [(ngModel)]="sodium"
+              (ngModelChange)="validateField('sodium')"
+              [placeholder]="'Norm: ' + ranges.sodium"
+              step="0.1"
+              [class.invalid-input]="!!errors.sodium"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('sodium')"
+              title="Change unit"
+            >
+              {{ units.sodium }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.sodium">
+            {{ errors.sodium }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.sodium && referenceWarnings.sodium"
+          >
+            {{ referenceWarnings.sodium }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Chloride -->
+      <div class="form-row">
+        <label for="chloride">Chloride</label>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="chloride"
+              name="chloride"
+              type="number"
+              [(ngModel)]="chloride"
+              (ngModelChange)="validateField('chloride')"
+              [placeholder]="'Norm: ' + ranges.chloride"
+              step="0.1"
+              [class.invalid-input]="!!errors.chloride"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('chloride')"
+              title="Change unit"
+            >
+              {{ units.chloride }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.chloride">
+            {{ errors.chloride }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.chloride && referenceWarnings.chloride"
+          >
+            {{ referenceWarnings.chloride }}
+          </small>
+        </div>
+      </div>
+
+      <!-- Albumin -->
+      <div class="form-row albumin-row">
+        <div class="field-label">
+          <label for="albumin">Albumin</label>
+          <small class="field-note">
+            Normal albumin is typically around 4 g/dL or 40 g/L.
+          </small>
+        </div>
+
+        <div class="field-control">
+          <div class="input-unit">
+            <input
+              id="albumin"
+              name="albumin"
+              type="number"
+              [(ngModel)]="albumin"
+              (ngModelChange)="validateField('albumin')"
+              [placeholder]="'Norm: ' + ranges.albumin"
+              step="0.1"
+              [class.invalid-input]="!!errors.albumin"
+            />
+
+            <button
+              type="button"
+              class="unit-button"
+              (click)="changeUnit('albumin')"
+              title="Change unit"
+            >
+              {{ units.albumin }}
+              <span class="switch-icon">⇄</span>
+            </button>
+          </div>
+
+          <small class="error" *ngIf="errors.albumin">
+            {{ errors.albumin }}
+          </small>
+
+          <small
+            class="warning"
+            *ngIf="!errors.albumin && referenceWarnings.albumin"
+          >
+            {{ referenceWarnings.albumin }}
+          </small>
+        </div>
+      </div>
+
+      <button class="calculate-btn" type="submit">Calculate ABG</button>
+    </form>
+
+    <!-- Results -->
+    <section class="result-panel" id="results">
+      <div class="result-header">
+        <h2>Result:</h2>
+
+        <span *ngIf="!result"> Please fill out required fields. </span>
+      </div>
+
+      <div class="result-content" *ngIf="result">
+        <h3>Final Result:- {{ result }}</h3>
+
+        <div class="result-item" *ngIf="anionGap !== null">
+          <span>Anion Gap</span>
+          <strong>{{ anionGap }} mmol/L</strong>
+        </div>
+
+        <div class="result-item" *ngIf="correctedAnionGap !== null">
+          <span>Albumin-corrected Anion Gap</span>
+          <strong>{{ correctedAnionGap }} mmol/L</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

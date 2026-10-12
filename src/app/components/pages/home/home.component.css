@@ -1177,3 +1177,121 @@ video {
     height: 36px;
   }
 }
+
+
+.usage-message {
+  margin-top: 12px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.usage-message strong {
+  color: #1d4ed8;
+}
+
+.calculate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.65);
+}
+
+.login-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 32px;
+  border-radius: 16px;
+  background: #fff;
+  color: #172033;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.lock-icon {
+  margin-bottom: 12px;
+  font-size: 38px;
+}
+
+.login-modal h2 {
+  margin: 0 0 12px;
+  font-size: 25px;
+}
+
+.login-modal p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.login-action,
+.signup-action {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-action {
+  background: #2563eb;
+  color: #fff;
+}
+
+.signup-action {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.login-action:hover {
+  background: #1d4ed8;
+}
+
+.signup-action:hover {
+  background: #dbeafe;
+}
+
+@media (max-width: 480px) {
+  .login-modal {
+    padding: 28px 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .login-action,
+  .signup-action {
+    text-align: center;
+  }
+}

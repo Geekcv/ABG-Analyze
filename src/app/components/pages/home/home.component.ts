@@ -9,7 +9,7 @@ type Field = 'ph' | 'paco2' | 'hco3' | 'sodium' | 'chloride' | 'albumin';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -35,26 +35,72 @@ export class HomeComponent {
   anionGap: number | null = null;
   correctedAnionGap: number | null = null;
   submitted = false;
-
   errors: Partial<Record<Field, string>> = {};
 
   currentYear = new Date().getFullYear();
 
+  // Free usage settings
+  readonly freeCalculationLimit = 2;
+  freeCalculationsUsed = 0;
+  showLoginPrompt = false;
 
   constructor(private router: Router) {
-  const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
 
-  if (token && role === 'ADMIN') {
-    this.router.navigate(['/admin-dashboard'], {
-      replaceUrl: true
-    });
-  } else if (token && role === 'USER') {
-    this.router.navigate(['/user-dashboard'], {
-      replaceUrl: true
-    });
+    // Keep your existing dashboard redirect behavior.
+    if (token && role === 'ADMIN') {
+      this.router.navigate(['/admin-dashboard'], {
+        replaceUrl: true
+      });
+    } else if (token && role === 'USER') {
+      this.router.navigate(['/user-dashboard'], {
+        replaceUrl: true
+      });
+    }
+
+    this.loadFreeCalculationCount();
   }
-}
+
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  get remainingFreeCalculations(): number {
+    return Math.max(
+      0,
+      this.freeCalculationLimit - this.freeCalculationsUsed
+    );
+  }
+
+  get canCalculate(): boolean {
+    return this.isLoggedIn ||
+      this.freeCalculationsUsed < this.freeCalculationLimit;
+  }
+
+  private loadFreeCalculationCount(): void {
+    const savedCount = Number(
+      localStorage.getItem('abg_free_calculations') || 0
+    );
+
+    this.freeCalculationsUsed =
+      Number.isInteger(savedCount) && savedCount >= 0
+        ? savedCount
+        : 0;
+  }
+
+  private recordFreeCalculation(): void {
+    if (this.isLoggedIn) {
+      return;
+    }
+
+    this.freeCalculationsUsed++;
+
+    localStorage.setItem(
+      'abg_free_calculations',
+      String(this.freeCalculationsUsed)
+    );
+  }
 
   get ranges(): Record<Field, string> {
     return {
@@ -87,22 +133,36 @@ export class HomeComponent {
       min: number,
       max: number
     ) => {
-      if (value !== null && Number.isFinite(value) &&
-          value >= 0 && (value < min || value > max)) {
-        warnings[field] = `Outside reference range (${this.ranges[field]})`;
+      if (
+        value !== null &&
+        Number.isFinite(value) &&
+        value >= 0 &&
+        (value < min || value > max)
+      ) {
+        warnings[field] =
+          `Outside reference range (${this.ranges[field]})`;
       }
     };
 
     check('ph', this.ph, 7.35, 7.45);
-    check('paco2', this.paco2,
+
+    check(
+      'paco2',
+      this.paco2,
       this.units.paco2 === 'kPa' ? 4.67 : 35,
-      this.units.paco2 === 'kPa' ? 6.00 : 45);
+      this.units.paco2 === 'kPa' ? 6.00 : 45
+    );
+
     check('hco3', this.hco3, 22, 26);
     check('sodium', this.sodium, 136, 145);
     check('chloride', this.chloride, 98, 106);
-    check('albumin', this.albumin,
+
+    check(
+      'albumin',
+      this.albumin,
       this.units.albumin === 'g/L' ? 35 : 3.5,
-      this.units.albumin === 'g/L' ? 55 : 5.5);
+      this.units.albumin === 'g/L' ? 55 : 5.5
+    );
 
     return warnings;
   }
@@ -141,9 +201,13 @@ export class HomeComponent {
     this.validateField(field);
   }
 
-  
-
   calculate(): void {
+    // Check the free limit before calculating.
+    if (!this.canCalculate) {
+      this.showLoginPrompt = true;
+      return;
+    }
+
     this.submitted = true;
     this.result = '';
     this.anionGap = null;
@@ -160,7 +224,6 @@ export class HomeComponent {
       return;
     }
 
-    // Convert input values to standard units for calculation.
     const ph = this.ph!;
     const paco2 = this.units.paco2 === 'kPa'
       ? this.paco2! * 7.50062
@@ -192,7 +255,7 @@ export class HomeComponent {
         'pH within reference interval. Further assessment is required.';
     }
 
-    const optional = ['sodium', 'chloride', 'albumin'] as const;
+    const optional: Field[] = ['sodium', 'chloride', 'albumin'];
 
     for (const field of optional) {
       const value = this.values[field];
@@ -205,11 +268,8 @@ export class HomeComponent {
     }
 
     if (this.sodium !== null && this.chloride !== null) {
-      const sodium = this.sodium;
-      const chloride = this.chloride;
-
       this.anionGap = Number(
-        (sodium - chloride - hco3).toFixed(2)
+        (this.sodium - this.chloride - hco3).toFixed(2)
       );
 
       if (this.albumin !== null) {
@@ -222,38 +282,43 @@ export class HomeComponent {
         );
       }
     }
+
+    // Count only after the calculation reaches completion.
+    this.recordFreeCalculation();
+
+    // Display login prompt immediately after the second free use.
+    if (!this.isLoggedIn && !this.canCalculate) {
+      this.showLoginPrompt = true;
+    }
   }
 
-validateField(field: Field): void {
-  const value = this.values[field];
-  let error = '';
+  validateField(field: Field): void {
+    const value = this.values[field];
+    let error = '';
 
-  // Empty required fields
-  if (value === null || value === undefined) {
-    if (field === 'ph' || field === 'paco2' || field === 'hco3') {
-      error = 'This field is required.';
+    if (value === null || value === undefined) {
+      if (field === 'ph' || field === 'paco2' || field === 'hco3') {
+        error = 'This field is required.';
+      }
+
+      this.errors[field] = error;
+      return;
+    }
+
+    if (!Number.isFinite(value)) {
+      this.errors[field] = 'Please enter a valid number.';
+      return;
+    }
+
+    if (field === 'ph' && (value < 0 || value > 14)) {
+      error = 'pH must be between 0 and 14.';
+    } else if (
+      ['paco2', 'hco3', 'sodium', 'chloride', 'albumin'].includes(field) &&
+      value <= 0
+    ) {
+      error = 'Value must be greater than zero.';
     }
 
     this.errors[field] = error;
-    return;
   }
-
-  // Invalid numeric values
-  if (!Number.isFinite(value)) {
-    this.errors[field] = 'Please enter a valid number.';
-    return;
-  }
-
-  // Absolute validation
-  if (field === 'ph' && (value < 0 || value > 14)) {
-    error = 'pH must be between 0 and 14.';
-  } else if (
-    ['paco2', 'hco3', 'sodium', 'chloride', 'albumin'].includes(field) &&
-    value <= 0
-  ) {
-    error = 'Value must be greater than zero.';
-  }
-
-  this.errors[field] = error;
-}
 }

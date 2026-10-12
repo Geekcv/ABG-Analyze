@@ -1,5 +1,4 @@
 <div class="user-page">
-
   <!-- Navbar -->
   <header class="navbar">
     <a routerLink="/" class="brand">
@@ -10,7 +9,7 @@
     <div class="nav-right">
       <div class="user-profile">
         <div class="avatar">
-          {{ userName ? userName.charAt(0).toUpperCase() : 'U' }}
+          {{ userName ? userName.charAt(0).toUpperCase() : "U" }}
         </div>
 
         <div class="profile-details">
@@ -28,7 +27,6 @@
 
   <!-- Main Content -->
   <main class="content">
-
     <!-- Welcome Section -->
     <section class="welcome-section">
       <div class="welcome-text">
@@ -38,12 +36,13 @@
         </span>
 
         <h1>
-          Welcome back, <span>{{ userName }}</span>!
+          Welcome back, <span>{{ userName }}</span
+          >!
         </h1>
 
         <p>
-          Manage your ABG analysis workflow and access your workspace
-          from one convenient place.
+          Manage your ABG analysis workflow and access your workspace from one
+          convenient place.
         </p>
       </div>
 
@@ -57,7 +56,6 @@
 
     <!-- Quick Stats -->
     <section class="stats-grid">
-
       <article class="stat-card">
         <div class="stat-icon teal">🧪</div>
         <div class="stat-info">
@@ -84,7 +82,6 @@
           <p>Your workspace status</p>
         </div>
       </article>
-
     </section>
 
     <!-- Analyzer Section -->
@@ -97,7 +94,6 @@
     </section>
 
     <section class="workspace-grid">
-
       <!-- Main Analyzer Card -->
       <article class="analyzer-card">
         <div class="card-top">
@@ -132,19 +128,16 @@
             </div>
           </div>
 
-          <a routerLink="/" class="primary-btn">
+          <a routerLink="/abg-calculator" class="primary-btn">
             Open ABG Analyzer
             <span>→</span>
           </a>
         </div>
 
-
-         
         <div class="card-decoration"></div>
       </article>
 
-
-        <article class="analyzer-card">
+      <article class="analyzer-card">
         <div class="card-top">
           <div class="analyzer-icon">🩺</div>
           <span class="available-badge">
@@ -157,18 +150,14 @@
           <span class="card-category">CLINICAL TOOL</span>
           <h2>Patient Blood Sugar Analyzer</h2>
 
-    
-         <a routerLink="/patient-blood-sugar" class="primary-btn">
+          <a routerLink="/patient-blood-sugar" class="primary-btn">
             Open Patient Blood Sugar Analyzer
             <span>→</span>
           </a>
         </div>
 
-
-         
         <div class="card-decoration"></div>
       </article>
-
 
       <!-- Recent Activity -->
       <article class="activity-card">
@@ -189,8 +178,8 @@
           <h3>No analysis history yet</h3>
 
           <p>
-            Your previous analyses will appear here once history storage
-            is connected to the backend.
+            Your previous analyses will appear here once history storage is
+            connected to the backend.
           </p>
 
           <a routerLink="/" class="secondary-btn">
@@ -198,7 +187,6 @@
           </a>
         </div>
       </article>
-
     </section>
 
     <!-- Information Banner -->
@@ -208,9 +196,9 @@
         <h3>Important medical information</h3>
         <p>
           ABG analysis is a clinical decision-support aid. Results must be
-          interpreted alongside the patient's clinical condition by a
-          qualified healthcare professional. Do not use this tool alone
-          to make treatment decisions.
+          interpreted alongside the patient's clinical condition by a qualified
+          healthcare professional. Do not use this tool alone to make treatment
+          decisions.
         </p>
       </div>
     </section>
@@ -220,6 +208,5 @@
       <span>© {{ currentYear }} Kirti Classess. All rights reserved.</span>
       <span>Built for a better healthcare workflow</span>
     </footer>
-
   </main>
 </div>
