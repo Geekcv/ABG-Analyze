@@ -1,7 +1,11 @@
 <div class="sugar-page">
-  <a routerLink="/user-dashboard" class="back-link">
-    ← Back to Patient Dashboard
-  </a>
+  
+<a
+  [routerLink]="isAdmin ? '/admin-dashboard' : '/patient-blood-sugar'"
+  class="back-link">
+  ← Back to {{ isAdmin ? 'Admin Dashboard' : 'Patient Dashboard' }}
+</a>
+
 
   <header class="page-header">
     <div>
@@ -46,7 +50,7 @@
           <th>Age</th>
           <th>Gender</th>
           <th>Sugar (mg/dL)</th>
-          <!-- <th>Treatments</th> -->
+          <th *ngIf="isAdmin">Treatments</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -68,20 +72,19 @@
               [(ngModel)]="patient.sugar"
               [name]="'sugar_' + patient.patient_id"
               placeholder="Enter sugar"
-              aria-label="Blood sugar in mg/dL"
               required
             />
           </td>
 
-          <!-- <td>
+          <td *ngIf="isAdmin">
             <input
               class="table-input"
               type="text"
               [(ngModel)]="patient.treatments"
               [name]="'treatment_' + patient.patient_id"
               placeholder="Enter treatment"
-              aria-label="Patient treatment">
-          </td> -->
+            />
+          </td>
 
           <td>
             <button
@@ -90,7 +93,7 @@
               (click)="submitSugar(patient)"
               [disabled]="patient.saving"
             >
-              {{ patient.saving ? "Saving..." : "Submit" }}
+              {{ patient.saving ? "Saving..." : isAdmin ? "Update" : "Submit" }}
             </button>
           </td>
         </tr>

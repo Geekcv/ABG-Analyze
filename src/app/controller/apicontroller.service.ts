@@ -96,4 +96,27 @@ async GetPatientSugarHistory(
 
   return await this.apiService.postUrl(payload, url);
 }
+
+
+async GetAllPatientCurrentSugar(url: string = 'common/') {
+  const payload = {
+    fn: 'common_fn',
+    se: 'fetch_patient_current_sugar',
+    data: {}
+  };
+
+  return await this.apiService.postUrl(payload, url);
+}
+
+async UpdatePatientSugar(data: any, url: string = 'common/') {
+  const payload = {
+    fn: 'common_fn',
+    se: 'update_patient_sugar',
+    data
+  };
+
+  return await this.apiService.postUrl(payload, url);
+}
+
+
 }

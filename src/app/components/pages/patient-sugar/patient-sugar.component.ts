@@ -20,13 +20,19 @@ interface PatientSugar {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './patient-sugar.component.html',
-  styleUrl: './patient-sugar.component.css'
+  styleUrl: './patient-sugar.component.css',
 })
 export class PatientSugarComponent implements OnInit {
   patients: PatientSugar[] = [];
   loading = false;
   errorMessage = '';
   successMessage = '';
+
+  // Login ke time localStorage mein role save hona chahiye.
+  role = (localStorage.getItem('role') || 'USER').toUpperCase();
+  get isAdmin(): boolean {
+    return this.role === 'ADMIN';
+  }
 
   constructor(private api: ApicontrollerService) {}
 
@@ -37,27 +43,35 @@ export class PatientSugarComponent implements OnInit {
   async fetchPatients(): Promise<void> {
     this.loading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
     try {
-      const resp: any = await this.api.getAllpatient();
-      const response =
-        resp?.data?.status !== undefined ? resp.data : resp;
+      // Admin: patient + latest sugar + treatment.
+      // User: patients only, with empty sugar input.
+      const resp: any = this.isAdmin
+        ? await this.api.GetAllPatientCurrentSugar()
+        : await this.api.getAllpatient();
 
-      if (response?.status === 0) {
-        this.patients = (Array.isArray(response.data) ? response.data : [])
-          .map((p: any) => ({
-            patient_id: p.id,
-            bed_no: p.bed_no || '',
-            name: p.name || '',
-            age: p.age,
-            gender: p.gender || '',
-            sugar: null,
-            treatments: '',
-            saving: false
-          }));
-      } else {
+      const response = resp?.data?.status !== undefined ? resp.data : resp;
+
+      if (response?.status !== 0) {
         this.errorMessage = response?.msg || 'Failed to fetch patients.';
+        return;
       }
+
+      this.patients = (Array.isArray(response.data) ? response.data : []).map(
+        (p: any) => ({
+          patient_id: Number(p.patient_id ?? p.id),
+          bed_no: p.bed_no || '',
+          name: p.name || '',
+          age: p.age,
+          gender: p.gender || '',
+          // Admin gets latest saved sugar; User always starts empty.
+          sugar: this.isAdmin && p.sugar != null ? Number(p.sugar) : null,
+          treatments: this.isAdmin ? p.treatments || '' : '',
+          saving: false,
+        }),
+      );
     } catch (error) {
       console.error('Fetch patients error:', error);
       this.errorMessage = 'Unable to fetch patients.';
@@ -72,32 +86,42 @@ export class PatientSugarComponent implements OnInit {
 
     if (
       patient.sugar === null ||
-      patient.sugar === undefined ||
       !Number.isFinite(Number(patient.sugar)) ||
       Number(patient.sugar) <= 0 ||
       Number(patient.sugar) > 2000
     ) {
-      this.errorMessage =
-        `Enter a valid sugar value for ${patient.name} (greater than 0 and up to 2000).`;
+      this.errorMessage = `Enter a valid sugar value for ${patient.name} (greater than 0 and up to 2000).`;
       return;
     }
 
     patient.saving = true;
 
     try {
-      const resp: any = await this.api.AddPatientSugar({
+      const payload = {
         patient_id: patient.patient_id,
         sugar: Number(patient.sugar),
-        treatments: patient.treatments.trim()
-      });
+        treatments: this.isAdmin ? patient.treatments.trim() : '',
+      };
 
-      const response =
-        resp?.data?.status !== undefined ? resp.data : resp;
+      // Admin updates the latest record; User inserts a new record.
+      const resp: any = this.isAdmin
+        ? await this.api.UpdatePatientSugar(payload)
+        : await this.api.AddPatientSugar(payload);
+
+      const response = resp?.data?.status !== undefined ? resp.data : resp;
 
       if (response?.status === 0) {
-        this.successMessage = `Sugar record saved for ${patient.name}.`;
-        patient.sugar = null;
-        patient.treatments = '';
+        this.successMessage = this.isAdmin
+          ? `Sugar and treatment updated for ${patient.name}.`
+          : `Sugar record saved for ${patient.name}.`;
+
+        // Admin keeps the saved values; User input becomes empty.
+        if (!this.isAdmin) {
+          patient.sugar = null;
+          patient.treatments = '';
+        } else {
+          await this.fetchPatients();
+        }
       } else {
         this.errorMessage =
           response?.msg || `Failed to save sugar for ${patient.name}.`;
