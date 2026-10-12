@@ -72,4 +72,28 @@ export class ApicontrollerService {
 
     return await this.apiService.postUrl(payload, url);
   }
+
+async AddPatientSugar(data: any, url: string = 'common/') {
+  const payload = {
+    fn: 'common_fn',
+    se: 'add_patient_sugar',
+    data
+  };
+
+  return await this.apiService.postUrl(payload, url);
+}
+
+
+async GetPatientSugarHistory(
+  data: any,
+  url: string = 'common/'
+) {
+  const payload = {
+    fn: 'common_fn',
+    se: 'fetch_patient_sugar_history',
+    data
+  };
+
+  return await this.apiService.postUrl(payload, url);
+}
 }

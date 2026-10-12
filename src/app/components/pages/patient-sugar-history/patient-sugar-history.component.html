@@ -1,0 +1,104 @@
+<div class="history-page">
+  <a routerLink="/patient-blood-sugar" class="back-link">
+    ← Back to Patient Dashboard
+  </a>
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">PATIENT MANAGEMENT</span>
+      <h1>Patient Sugar History</h1>
+      <p>Patient details and all previously saved sugar readings.</p>
+    </div>
+  </header>
+
+  <div *ngIf="loading" class="state-card">
+    Loading patient records...
+  </div>
+
+  <div *ngIf="!loading && errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="!loading && patient && !errorMessage">
+
+    <section class="patient-info">
+      <h2>{{ patient.name }}</h2>
+
+      <div class="info-grid">
+        <div>
+          <span>Patient ID</span>
+          <strong>{{ patient.row_id || patient.id }}</strong>
+        </div>
+
+        <div>
+          <span>Age</span>
+          <strong>{{ patient.age }} years</strong>
+        </div>
+
+        <div>
+          <span>Gender</span>
+          <strong>{{ patient.gender || '—' }}</strong>
+        </div>
+
+        <div>
+          <span>IPD Number</span>
+          <strong>{{ patient.ipd_no || '—' }}</strong>
+        </div>
+
+        <div>
+          <span>Bed Number</span>
+          <strong>{{ patient.bed_no || '—' }}</strong>
+        </div>
+
+        <div>
+          <span>Diagnosis</span>
+          <strong>{{ patient.diagnosis || '—' }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="history-section">
+      <div class="history-heading">
+        <div>
+          <h2>Sugar Reading History</h2>
+          <p>All saved readings for this patient.</p>
+        </div>
+
+        <span class="record-count">
+          {{ sugarRecords.length }} records
+        </span>
+      </div>
+
+      <div *ngIf="sugarRecords.length === 0" class="state-card">
+        No sugar readings have been saved for this patient yet.
+      </div>
+
+      <div class="table-container" *ngIf="sugarRecords.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sugar (mg/dL)</th>
+              <th>Treatments</th>
+              <th>Recorded Date &amp; Time</th>
+              <th>Updated Date &amp; Time</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let record of sugarRecords; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <strong class="sugar-value">{{ record.sugar }}</strong>
+              </td>
+              <td>{{ record.treatments || '—' }}</td>
+              <td>{{ record.cr_on | date:'dd MMM yyyy, hh:mm a' }}</td>
+              <td>{{ record.up_on | date:'dd MMM yyyy, hh:mm a' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </ng-container>
+</div>

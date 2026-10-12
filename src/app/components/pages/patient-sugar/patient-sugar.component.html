@@ -1,0 +1,100 @@
+<div class="sugar-page">
+  <a routerLink="/user-dashboard" class="back-link">
+    ← Back to Patient Dashboard
+  </a>
+
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">PATIENT MANAGEMENT</span>
+      <h1>All Patient Current Sugar</h1>
+      <p>Enter and save blood sugar readings for each patient.</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="fetchPatients()"
+      [disabled]="loading"
+    >
+      {{ loading ? "Loading..." : "↻ Refresh" }}
+    </button>
+  </header>
+
+  <p *ngIf="successMessage" class="success-message" role="status">
+    {{ successMessage }}
+  </p>
+
+  <p *ngIf="errorMessage" class="error-message" role="alert">
+    {{ errorMessage }}
+  </p>
+
+  <div *ngIf="loading" class="state-card">Loading patients...</div>
+
+  <div
+    *ngIf="!loading && patients.length === 0 && !errorMessage"
+    class="state-card"
+  >
+    No patients found.
+  </div>
+
+  <div class="table-container" *ngIf="!loading && patients.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Bed No.</th>
+          <th>Patient</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Sugar (mg/dL)</th>
+          <!-- <th>Treatments</th> -->
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let patient of patients">
+          <td>{{ patient.bed_no || "—" }}</td>
+          <td class="patient-name">{{ patient.name }}</td>
+          <td>{{ patient.age }}</td>
+          <td>{{ patient.gender || "—" }}</td>
+
+          <td>
+            <input
+              class="table-input sugar-input"
+              type="number"
+              min="1"
+              max="2000"
+              step="0.01"
+              [(ngModel)]="patient.sugar"
+              [name]="'sugar_' + patient.patient_id"
+              placeholder="Enter sugar"
+              aria-label="Blood sugar in mg/dL"
+              required
+            />
+          </td>
+
+          <!-- <td>
+            <input
+              class="table-input"
+              type="text"
+              [(ngModel)]="patient.treatments"
+              [name]="'treatment_' + patient.patient_id"
+              placeholder="Enter treatment"
+              aria-label="Patient treatment">
+          </td> -->
+
+          <td>
+            <button
+              type="button"
+              class="submit-btn"
+              (click)="submitSugar(patient)"
+              [disabled]="patient.saving"
+            >
+              {{ patient.saving ? "Saving..." : "Submit" }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
