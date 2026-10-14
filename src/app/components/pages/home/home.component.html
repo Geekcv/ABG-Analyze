@@ -1,34 +1,38 @@
 <header class="navbar">
-  
-  
-<header class="navbar">
-  <div class="nav-content">
-    <a class="logo" routerLink="/" aria-label="Kirti Classess home">
-      <img src="/logo.ico" alt="Kirti Classess logo" />
-    </a>
+  <header class="navbar">
+    <div class="nav-content">
+      <a class="logo" routerLink="/" aria-label="Kirti Classess home">
+        <img src="/logo.ico" alt="Kirti Classess logo" />
+      </a>
 
-    <span class="brand">ABG Analyzer</span>
+      <span class="brand">ABG Analyzer</span>
 
-    <nav class="nav-links">
-      <a routerLink="/">Home</a>
-      <a href="#instructions">Instructions</a>
-      <a href="#results">Results</a>
-    </nav>
+      <nav class="nav-links">
+        <a routerLink="/">Home</a>
+        <a href="#instructions">Instructions</a>
+        <a href="#results">Results</a>
+      </nav>
 
-    <a class="login-btn" routerLink="/login">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-          fill="none" stroke="currentColor" stroke-width="2"/>
-        <path d="M4 21a8 8 0 0 1 16 0"
-          fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round"/>
-      </svg>
-      <span>Login</span>
-    </a>
-  </div>
-</header>
-
-
+      <a class="login-btn" routerLink="/login">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M4 21a8 8 0 0 1 16 0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span>Login</span>
+      </a>
+    </div>
+  </header>
 </header>
 
 <div class="page-layout">
@@ -303,18 +307,15 @@
 
       <!-- <button class="calculate-btn" type="submit">Calculate ABG</button> -->
 
-      <button
-  class="calculate-btn"
-  type="submit"
-  [disabled]="!canCalculate">
-  {{ canCalculate ? 'Calculate ABG' : 'Login for More Calculations' }}
-</button>
+      <button class="calculate-btn" type="submit" [disabled]="!canCalculate">
+        {{ canCalculate ? "Calculate ABG" : "Login for More Calculations" }}
+      </button>
 
-<p *ngIf="!isLoggedIn" class="usage-message">
-  Free calculations remaining:
-  <strong>{{ remainingFreeCalculations }}</strong> of
-  {{ freeCalculationLimit }}
-</p>
+      <p *ngIf="!isLoggedIn" class="usage-message">
+        Free calculations remaining:
+        <strong>{{ remainingFreeCalculations }}</strong> of
+        {{ freeCalculationLimit }}
+      </p>
     </form>
 
     <!-- Results -->
@@ -341,45 +342,42 @@
     </section>
   </main>
   <div
-  class="login-overlay"
-  *ngIf="showLoginPrompt"
-  (click)="showLoginPrompt = false">
+    class="login-overlay"
+    *ngIf="showLoginPrompt"
+    (click)="showLoginPrompt = false"
+  >
+    <section
+      class="login-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="limit-title"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="close-btn"
+        aria-label="Close login prompt"
+        (click)="showLoginPrompt = false"
+      >
+        ×
+      </button>
 
-  <section
-    class="login-modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="limit-title"
-    (click)="$event.stopPropagation()">
+      <div class="lock-icon">🔒</div>
 
-    <button
-      type="button"
-      class="close-btn"
-      aria-label="Close login prompt"
-      (click)="showLoginPrompt = false">
-      ×
-    </button>
+      <h2 id="limit-title">Free Limit Reached</h2>
 
-    <div class="lock-icon">🔒</div>
+      <p>
+        You have used your {{ freeCalculationLimit }} free ABG calculations.
+        Please log in or create an account to continue using the calculator.
+      </p>
 
-    <h2 id="limit-title">Free Limit Reached</h2>
+      <div class="modal-actions">
+        <a routerLink="/login" class="login-action"> Login </a>
 
-    <p>
-      You have used your {{ freeCalculationLimit }} free ABG calculations.
-      Please log in or create an account to continue using the calculator.
-    </p>
-
-    <div class="modal-actions">
-      <a routerLink="/login" class="login-action">
-        Login
-      </a>
-
-      <a routerLink="/signup" class="signup-action">
-        Create Account
-      </a>
-    </div>
-  </section>
-</div>
+        <a routerLink="/signup" class="signup-action"> Create Account </a>
+      </div>
+    </section>
+  </div>
 </div>
 
 <footer class="site-footer">

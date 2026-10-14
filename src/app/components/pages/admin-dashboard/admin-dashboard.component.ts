@@ -13,6 +13,9 @@ import { ApicontrollerService } from '../../../controller/apicontroller.service'
 })
 export class AdminDashboardComponent implements OnInit {
   adminName = localStorage.getItem('name') || 'Admin';
+  
+isSidebarOpen = false;
+
 
   users: any[] = [];
   loadingUsers = false;

@@ -1215,3 +1215,97 @@
     gap: 12px;
   }
 }
+
+
+/* Desktop: hide mobile menu button */
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 14px 16px;
+  }
+
+  /* Three-dot button */
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 17px;
+    right: 16px;
+
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #334b65;
+    border-radius: 10px;
+    background: #234363;
+    color: #ffffff;
+
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  /* Closed sidebar */
+  .sidebar:not(.sidebar-open) .sidebar-label,
+  .sidebar:not(.sidebar-open) .sidebar-nav,
+  .sidebar:not(.sidebar-open) .sidebar-bottom {
+    display: none;
+  }
+
+  /* Open sidebar */
+  .sidebar.sidebar-open .sidebar-label,
+  .sidebar.sidebar-open .sidebar-nav,
+  .sidebar.sidebar-open .sidebar-bottom {
+    display: block;
+  }
+
+  .sidebar.sidebar-open .sidebar-bottom {
+    margin-top: 12px;
+  }
+
+  .brand {
+    padding: 0 48px 0 0;
+  }
+
+  .sidebar.sidebar-open .brand {
+    padding-bottom: 14px;
+  }
+
+  .sidebar.sidebar-open .sidebar-nav {
+    display: grid;
+    gap: 6px;
+  }
+}
+
+
+/* Sticky Sidebar - Desktop */
+@media (min-width: 761px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: start;
+    overflow-y: auto;
+  }
+}
+
+/* Sticky Sidebar - Mobile */
+@media (max-width: 760px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    height: auto;
+    align-self: start;
+  }
+}

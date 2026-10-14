@@ -1,14 +1,16 @@
 <div class="sugar-page">
   
-<a
-  [routerLink]="isAdmin ? '/admin-dashboard' : '/patient-blood-sugar'"
-  class="back-link">
-  ← Back to {{ isAdmin ? 'Admin Dashboard' : 'Patient Dashboard' }}
-</a>
 
 
   <header class="page-header">
+  
     <div>
+        <a
+  [routerLink]="isAdmin ? '/admin-dashboard' : '/patient-blood-sugar'"
+  class="back-link">
+  ← Back to {{ isAdmin ? 'Admin Dashboard' : 'Patient Dashboard' }}
+</a><br>
+
       <span class="eyebrow">PATIENT MANAGEMENT</span>
       <h1>All Patient Current Sugar</h1>
       <p>Enter and save blood sugar readings for each patient.</p>

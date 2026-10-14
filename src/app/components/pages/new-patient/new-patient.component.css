@@ -255,3 +255,17 @@
     box-sizing: border-box;
   }
 }
+
+
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  margin: 0 -24px 32px;
+  padding: 20px 24px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(20, 48, 77, 0.05);
+}

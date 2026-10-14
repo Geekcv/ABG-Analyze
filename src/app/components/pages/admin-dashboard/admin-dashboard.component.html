@@ -1,7 +1,16 @@
-
 <div class="dashboard">
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" [class.sidebar-open]="isSidebarOpen">
+    <button
+      type="button"
+      class="mobile-menu-btn"
+      (click)="isSidebarOpen = !isSidebarOpen"
+      [attr.aria-expanded]="isSidebarOpen"
+      aria-label="Toggle sidebar menu"
+    >
+      ⋮
+    </button>
+
     <a class="brand" routerLink="/admin-dashboard">
       <span class="brand-icon">🩺</span>
       <span>
@@ -19,13 +28,14 @@
       </a>
 
       <a
-    routerLink="/patient-current-sugar"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }"
-    class="nav-link">
-    <span class="nav-icon">♧</span>
-    All Patient Current Sugar
-  </a>
+        routerLink="/patient-current-sugar"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link"
+      >
+        <span class="nav-icon">♧</span>
+        All Patient Current Sugar
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -122,14 +132,14 @@
           [disabled]="loadingUsers"
         >
           <span [class.spin]="loadingUsers">↻</span>
-          {{ loadingUsers ? 'Refreshing' : 'Refresh' }}
+          {{ loadingUsers ? "Refreshing" : "Refresh" }}
         </button>
       </div>
 
       <div class="table-meta">
         <div class="user-count">
           <span class="count-dot"></span>
-          {{ users.length }} user{{ users.length === 1 ? '' : 's' }} found
+          {{ users.length }} user{{ users.length === 1 ? "" : "s" }} found
         </div>
         <span class="filter-label">Admin accounts excluded</span>
       </div>
@@ -148,10 +158,7 @@
         <button type="button" (click)="loadUsers()">Try again</button>
       </div>
 
-      <div
-        class="table-container"
-        *ngIf="!loadingUsers && !usersError"
-      >
+      <div class="table-container" *ngIf="!loadingUsers && !usersError">
         <table *ngIf="users.length > 0; else noUsers">
           <thead>
             <tr>
@@ -167,10 +174,10 @@
               <td>
                 <div class="user-cell">
                   <div class="user-avatar" [attr.data-index]="i % 5">
-                    {{ (user.name || 'U').charAt(0).toUpperCase() }}
+                    {{ (user.name || "U").charAt(0).toUpperCase() }}
                   </div>
                   <div class="user-details">
-                    <strong>{{ user.name || 'Unnamed user' }}</strong>
+                    <strong>{{ user.name || "Unnamed user" }}</strong>
                     <span>{{ user.email }}</span>
                   </div>
                 </div>
@@ -187,12 +194,12 @@
                   [class.status-inactive]="!user.is_active"
                 >
                   <span class="status-dot"></span>
-                  {{ user.is_active ? 'Active' : 'Inactive' }}
+                  {{ user.is_active ? "Active" : "Inactive" }}
                 </span>
               </td>
 
               <td class="date-cell">
-                {{ user.cr_on ? (user.cr_on | date:'dd MMM yyyy') : '—' }}
+                {{ user.cr_on ? (user.cr_on | date: "dd MMM yyyy") : "—" }}
               </td>
             </tr>
           </tbody>
@@ -212,7 +219,11 @@
         class="table-footer"
         *ngIf="!loadingUsers && !usersError && users.length > 0"
       >
-        <span>Showing {{ users.length }} user{{ users.length === 1 ? '' : 's' }}</span>
+        <span
+          >Showing {{ users.length }} user{{
+            users.length === 1 ? "" : "s"
+          }}</span
+        >
         <span>Sorted by newest registration</span>
       </footer>
     </section>

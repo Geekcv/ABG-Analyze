@@ -37,6 +37,14 @@
   object-fit: contain;
 }
 
+.brand {
+  /* color: #25364a; */
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+
 .back-link {
   color: #52665a;
   font-size: 14px;
@@ -342,4 +350,42 @@
     opacity: 1;
     transform: translate(-50%, 0);
   }
+}
+
+
+
+.login-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  min-height: 72px;
+  box-sizing: border-box;
+  padding: 12px 6%;
+
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid #e4ebe6;
+  box-shadow: 0 4px 16px rgba(20, 55, 35, 0.05);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+
+
+.login-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+.login-main {
+  padding-top: 96px;
 }
