@@ -1,57 +1,226 @@
 
 <div class="patient-page">
-  <header class="page-header">
+
+
+<!-- Sticky Header -->
+<header class="page-header">
+  <div class="header-inner">
+
+    <!-- Left: Back Button -->
     <a routerLink="/user-dashboard" class="back-link">
-      ← Back to Dashboard
+      <span class="back-icon">←</span>
+      <span>Back</span>
     </a>
 
-    <span class="eyebrow">PATIENT MANAGEMENT</span>
-    <h1>Patient Blood Sugar Analyzer</h1>
-    <p>Choose an option to continue.</p>
-  </header>
+    <!-- Center: Page Title -->
+    <div class="header-content">
+      <h1>Patient Blood Sugar Analyzer</h1>
+      <p>Choose a patient workflow to continue.</p>
+    </div>
 
-  <section class="patient-grid">
+    <!-- Right: Hamburger Toggle -->
+    <div class="nav-actions">
+      <button
+        type="button"
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
 
-    <article class="patient-card">
-      <div class="card-icon old">👥</div>
-      <h2>All Patient Current Sugar </h2>
-      <!-- <p>
-        View existing patients, select a patient and continue
-        with their blood sugar analysis.
-      </p> -->
-
-           <a routerLink="/patient-current-sugar" class="primary-btn">
-  Open Patient Blood Sugar Analyzer
-  <span>→</span>
-</a>
-    </article>
+  </div>
+</header>
 
 
 
-    <article class="patient-card">
-      <div class="card-icon old">👥</div>
-      <h2>Old Patient</h2>
-      <p>
-        View existing patients, select a patient and continue
-        with their blood sugar analysis.
-      </p>
+<!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
 
-      <a routerLink="/old-patients" class="primary-btn">
-        View Patient List →
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  <div class="menu-heading">
+    <span>Navigation</span>
+    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
+      ×
+    </button> -->
+  </div>
+  <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
       </a>
-    </article>
 
-    <article class="patient-card">
-      <div class="card-icon new">➕</div>
-      <h2>New Patient</h2>
-      <p>
-        Register a new patient and enter their details
-        before starting an analysis.
-      </p>
-
-      <a routerLink="/new-patient" class="primary-btn">
-        Add New Patient →
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
       </a>
-    </article>
-  </section>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
+  <!-- Main Content -->
+  <main class="page-content">
+
+    <div class="section-heading">
+      <div>
+        <h2>Choose an option</h2>
+        <p>Select the workflow you want to open.</p>
+      </div>
+      <span class="option-count">3 OPTIONS</span>
+    </div>
+
+    <section class="patient-grid">
+
+      <!-- Current Patient Sugar -->
+      <article class="patient-card current-card">
+        <div class="card-top">
+          <div class="card-icon current-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11Z"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8.5 12h2l1.2-2.5 2 5 1.2-2.5h1.1"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <span class="card-tag current-tag">CURRENT</span>
+        </div>
+
+        <h3>Current Patient Sugar</h3>
+        <p>
+          Open the blood sugar analyzer to review current patient readings
+          and continue the analysis workflow.
+        </p>
+
+        <a routerLink="/patient-current-sugar" class="primary-btn">
+          <span>Open Sugar Analyzer</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </article>
+
+      <!-- Existing Patients -->
+      <article class="patient-card old-card">
+        <div class="card-top">
+          <div class="card-icon old-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="9.5"
+                cy="7"
+                r="4"
+                stroke="currentColor"
+                stroke-width="1.7"
+              />
+              <path
+                d="M17 11a4 4 0 0 0 0-8M17 14.5a4 4 0 0 1 4 4V20"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <span class="card-tag old-tag">EXISTING</span>
+        </div>
+
+        <h3>Old Patients</h3>
+        <p>
+          View the existing patient list, select a patient and continue
+          with their blood sugar analysis.
+        </p>
+
+        <a routerLink="/old-patients" class="primary-btn secondary-btn">
+          <span>View Patient List</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </article>
+
+      <!-- New Patient -->
+      <article class="patient-card new-card">
+        <div class="card-top">
+          <div class="card-icon new-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+                stroke="currentColor"
+                stroke-width="1.7"
+              />
+              <path
+                d="M2.5 20v-1.5a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4V20"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+              <path
+                d="M19 8v8M15 12h8"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+
+          <span class="card-tag new-tag">NEW ENTRY</span>
+        </div>
+
+        <h3>New Patient</h3>
+        <p>
+          Register a new patient and enter their details before
+          starting a blood sugar analysis.
+        </p>
+
+        <a routerLink="/new-patient" class="primary-btn new-btn">
+          <span>Add New Patient</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </article>
+
+    </section>
+
+    <div class="page-note">
+      <span class="note-icon" aria-hidden="true">ⓘ</span>
+      <p>
+        Verify patient details and recorded readings before using results
+        to support clinical decisions.
+      </p>
+    </div>
+
+  </main>
 </div>

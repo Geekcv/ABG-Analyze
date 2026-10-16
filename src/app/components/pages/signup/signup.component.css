@@ -350,3 +350,15 @@
     transform: translate(-50%, 0);
   }
 }
+
+.signup-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* width: 100%; */
+}
+
+/* .signup-main {
+  padding-top: 96px;
+} */

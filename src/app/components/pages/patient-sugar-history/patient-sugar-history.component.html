@@ -1,105 +1,262 @@
+
 <div class="history-page">
- 
+  <div class="page-shell">
 
-  <header class="page-header">
-    <div>
-       <a routerLink="/patient-blood-sugar" class="back-link">
-    ← Back to Patient Dashboard
-  </a><br>
-      <span class="eyebrow">PATIENT MANAGEMENT</span>
-      <h1>Patient Sugar History</h1>
-      <p>Patient details and all previously saved sugar readings.</p>
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="header-main">
+        <a routerLink="/patient-blood-sugar" class="back-link">
+          <span class="back-icon" aria-hidden="true">←</span>
+          <span>Back to Patient Dashboard</span>
+        </a>
+
+        <div class="title-row">
+          <div class="title-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M4 19V5M4 19h16M7 15l4-4 3 2 5-7"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="19" cy="6" r="1.5" fill="currentColor" />
+            </svg>
+          </div>
+
+          <div class="title-copy">
+            <span class="eyebrow">PATIENT MANAGEMENT</span>
+            <h1>Patient Sugar History</h1>
+            <p>Review previously saved blood sugar readings and their timestamps.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-status" *ngIf="!loading && patient && !errorMessage">
+        <span class="status-dot"></span>
+        History available
+      </div>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="state-card loading-state">
+      <span class="loader" aria-hidden="true"></span>
+      <h3>Loading patient history</h3>
+      <p>Please wait while the records are retrieved.</p>
     </div>
-  </header>
 
-  <div *ngIf="loading" class="state-card">
-    Loading patient records...
+    <!-- Error State -->
+    <div
+      *ngIf="!loading && errorMessage"
+      class="alert alert-error"
+      role="alert"
+      aria-live="assertive"
+    >
+      <span class="alert-icon" aria-hidden="true">!</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <ng-container *ngIf="!loading && patient && !errorMessage">
+
+      <!-- Patient Summary -->
+      <section class="patient-summary">
+        <div class="summary-heading">
+          <div class="patient-avatar" aria-hidden="true">
+            {{ patient.name ? (patient.name.trim().charAt(0) | uppercase) : 'P' }}
+          </div>
+
+          <div class="patient-heading-copy">
+            <span class="summary-label">PATIENT RECORD</span>
+            <h2>{{ patient.name || 'Patient' }}</h2>
+            <p>
+              Patient ID:
+              <strong>{{ patient.row_id || patient.id || '—' }}</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="patient-details">
+          <div class="detail-item">
+            <span class="detail-label">Age</span>
+            <strong>
+              {{ patient.age !== null && patient.age !== undefined ? patient.age + ' years' : '—' }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Gender</span>
+            <strong>{{ patient.gender || '—' }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">IPD Number</span>
+            <strong>{{ patient.ipd_no || '—' }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Bed Number</span>
+            <strong>{{ patient.bed_no || '—' }}</strong>
+          </div>
+
+          <div class="detail-item diagnosis-detail">
+            <span class="detail-label">Diagnosis</span>
+            <strong>{{ patient.diagnosis || '—' }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Section -->
+      <section class="history-section">
+        <div class="history-heading">
+          <div>
+            <span class="section-eyebrow">READING REGISTER</span>
+            <h2>Sugar Reading History</h2>
+            <p>All previously saved readings for this patient.</p>
+          </div>
+
+          <div class="record-count">
+            <span class="count-number">{{ sugarRecords.length }}</span>
+            <span>{{ sugarRecords.length === 1 ? 'Record' : 'Records' }}</span>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="sugarRecords.length === 0" class="state-card empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13H4V6a1 1 0 0 1 1-1Z"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8 13h3M8 16h6"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h3>No readings yet</h3>
+          <p>No sugar readings have been saved for this patient yet.</p>
+        </div>
+
+        <!-- History Table -->
+        <div class="table-card" *ngIf="sugarRecords.length > 0">
+          <div class="table-toolbar">
+            <div>
+              <span class="toolbar-title">Blood Sugar Register</span>
+              <span class="toolbar-subtitle">
+                Reading values are displayed in mg/dL.
+              </span>
+            </div>
+
+            <span class="unit-badge">mg/dL</span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" class="number-column">#</th>
+                  <th scope="col">Blood Sugar</th>
+                  <th scope="col">Treatment</th>
+                  <th scope="col">Recorded Date &amp; Time</th>
+                  <th scope="col">Updated Date &amp; Time</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let record of sugarRecords; let i = index">
+                  <td>
+                    <span class="row-number">{{ i + 1 }}</span>
+                  </td>
+
+                  <td>
+                    <span class="sugar-badge">
+                      <span class="sugar-dot"></span>
+                      <strong>{{ record.sugar }}</strong>
+                      <span class="sugar-unit">mg/dL</span>
+                    </span>
+                  </td>
+
+                  <td>
+                    <span class="treatment-text">
+                      {{ record.treatments || '—' }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                          />
+                          <path
+                            d="M12 7v5l3 2"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span>
+                        {{ record.cr_on | date:'dd MMM yyyy, hh:mm a' }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="date-cell">
+                      <span class="date-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <path
+                            d="M20 11a8 8 0 0 0-14.8-3L3 11M3 5v6h6M4 13a8 8 0 0 0 14.8 3L21 13m0 6v-6h-6"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span>
+                        {{ record.up_on | date:'dd MMM yyyy, hh:mm a' }}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span>
+              Showing {{ sugarRecords.length }}
+              {{ sugarRecords.length === 1 ? 'record' : 'records' }}
+            </span>
+            <span>All times use the configured Angular date format.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Information Note -->
+      <div class="info-note">
+        <span class="info-symbol" aria-hidden="true">i</span>
+        <p>
+          <strong>Record information:</strong>
+          This history displays saved readings and timestamps. It does not
+          independently diagnose a medical condition.
+        </p>
+      </div>
+
+    </ng-container>
   </div>
-
-  <div *ngIf="!loading && errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
-
-  <ng-container *ngIf="!loading && patient && !errorMessage">
-
-    <!-- <section class="patient-info">
-      <h2>{{ patient.name }}</h2>
-
-      <div class="info-grid">
-        <div>
-          <span>Patient ID</span>
-          <strong>{{ patient.row_id || patient.id }}</strong>
-        </div>
-
-        <div>
-          <span>Age</span>
-          <strong>{{ patient.age }} years</strong>
-        </div>
-
-        <div>
-          <span>Gender</span>
-          <strong>{{ patient.gender || '—' }}</strong>
-        </div>
-
-        <div>
-          <span>IPD Number</span>
-          <strong>{{ patient.ipd_no || '—' }}</strong>
-        </div>
-
-        <div>
-          <span>Bed Number</span>
-          <strong>{{ patient.bed_no || '—' }}</strong>
-        </div>
-
-        <div>
-          <span>Diagnosis</span>
-          <strong>{{ patient.diagnosis || '—' }}</strong>
-        </div>
-      </div>
-    </section> -->
-
-    <section class="history-section">
-      <div class="history-heading">
-        <div>
-          <h2>Sugar Reading History</h2>
-          <p>All saved readings for this patient.</p>
-        </div>
-
-        <span class="record-count">
-          {{ sugarRecords.length }} records
-        </span>
-      </div>
-
-      <div *ngIf="sugarRecords.length === 0" class="state-card">
-        No sugar readings have been saved for this patient yet.
-      </div>
-
-      <div class="table-container" *ngIf="sugarRecords.length > 0">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Sugar (mg/dL)</th>
-              <th>Treatments</th>
-              <th>Recorded Date &amp; Time</th>
-              <th>Updated Date &amp; Time</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let record of sugarRecords; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>
-                <strong class="sugar-value">{{ record.sugar }}</strong>
-              </td>
-              <td>{{ record.treatments || '—' }}</td>
-              <td>{{ record.cr_on | date:'dd MMM yyyy, hh:mm a' }}</td>
-              <td>{{ record.up_on | date:'dd MMM yyyy, hh:mm a' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-  </ng-container>
 </div>

@@ -1,105 +1,298 @@
+
 <div class="sugar-page">
-  
+  <div class="page-shell">
 
 
-  <header class="page-header">
-  
-    <div>
-        <a
-  [routerLink]="isAdmin ? '/admin-dashboard' : '/patient-blood-sugar'"
-  class="back-link">
-  ← Back to {{ isAdmin ? 'Admin Dashboard' : 'Patient Dashboard' }}
-</a><br>
+<!-- Page Header -->
+<header class="page-header">
 
-      <span class="eyebrow">PATIENT MANAGEMENT</span>
-      <h1>All Patient Current Sugar</h1>
-      <p>Enter and save blood sugar readings for each patient.</p>
-    </div>
-
-    <button
-      type="button"
-      class="refresh-btn"
-      (click)="fetchPatients()"
-      [disabled]="loading"
-    >
-      {{ loading ? "Loading..." : "↻ Refresh" }}
-    </button>
-  </header>
-
-  <p *ngIf="successMessage" class="success-message" role="status">
-    {{ successMessage }}
-  </p>
-
-  <p *ngIf="errorMessage" class="error-message" role="alert">
-    {{ errorMessage }}
-  </p>
-
-  <div *ngIf="loading" class="state-card">Loading patients...</div>
-
-  <div
-    *ngIf="!loading && patients.length === 0 && !errorMessage"
-    class="state-card"
+  <!-- Back Button - Left -->
+  <a
+    [routerLink]="isAdmin ? '/admin-dashboard' : '/patient-blood-sugar'"
+    class="back-link"
   >
-    No patients found.
+    <span class="back-icon">←</span>
+    <span>Back</span>
+  </a>
+
+  <!-- Title - Center -->
+  <div class="heading-copy">
+    <h1>Current Blood Sugar</h1>
+    <p>Record and manage blood sugar readings for your patients.</p>
   </div>
 
-  <div class="table-container" *ngIf="!loading && patients.length > 0">
-    <table>
-      <thead>
-        <tr>
-          <th>Bed No.</th>
-          <th>Patient</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Sugar (mg/dL)</th>
-          <th *ngIf="isAdmin">Treatments</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+  <!-- Hamburger Menu - Right -->
+  <div class="nav-actions">
+    <button
+      type="button"
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 
-      <tbody>
-        <tr *ngFor="let patient of patients">
-          <td>{{ patient.bed_no || "—" }}</td>
-          <td class="patient-name">{{ patient.name }}</td>
-          <td>{{ patient.age }}</td>
-          <td>{{ patient.gender || "—" }}</td>
+</header>
 
-          <td>
-            <input
-              class="table-input sugar-input"
-              type="number"
-              min="1"
-              max="2000"
-              step="0.01"
-              [(ngModel)]="patient.sugar"
-              [name]="'sugar_' + patient.patient_id"
-              placeholder="Enter sugar"
-              required
+
+    
+<!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
+
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  <div class="menu-heading">
+    <span>Navigation</span>
+    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
+      ×
+    </button> -->
+  </div>
+
+    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
+    <!-- Success Message -->
+    <div
+      *ngIf="successMessage"
+      class="alert alert-success"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="alert-icon" aria-hidden="true">✓</span>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <!-- Error Message -->
+    <div
+      *ngIf="errorMessage"
+      class="alert alert-error"
+      role="alert"
+      aria-live="assertive"
+    >
+      <span class="alert-icon" aria-hidden="true">!</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Patient Section -->
+    <section class="patient-section">
+      <div class="section-heading">
+        <div>
+          <h2>Patient Records</h2>
+          <p>Enter the latest reading and save the changes.</p>
+        </div>
+
+        <div class="patient-count" *ngIf="!loading && patients.length > 0">
+          <span class="count-dot"></span>
+          {{ patients.length }} {{ patients.length === 1 ? 'Patient' : 'Patients' }}
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="state-card">
+        <span class="loader" aria-hidden="true"></span>
+        <h3>Loading patient records</h3>
+        <p>Please wait while we retrieve the latest records.</p>
+      </div>
+
+      <!-- Empty State -->
+      <div
+        *ngIf="!loading && patients.length === 0 && !errorMessage"
+        class="state-card empty-state"
+      >
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M16 20v-1.5a4.5 4.5 0 0 0-4.5-4.5h-3A4.5 4.5 0 0 0 4 18.5V20M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM17 11a3 3 0 0 0 0-6M17 14h3a3 3 0 0 1 3 3v3"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
-          </td>
+          </svg>
+        </div>
+        <h3>No patients found</h3>
+        <p>There are no patient records available to display.</p>
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="fetchPatients()"
+        >
+          Try Again
+        </button>
+      </div>
 
-          <td *ngIf="isAdmin">
-            <input
-              class="table-input"
-              type="text"
-              [(ngModel)]="patient.treatments"
-              [name]="'treatment_' + patient.patient_id"
-              placeholder="Enter treatment"
-            />
-          </td>
+      <!-- Patient Table -->
+      <div
+        class="table-card"
+        *ngIf="!loading && patients.length > 0"
+      >
+        <div class="table-toolbar">
+          <div class="table-toolbar-copy">
+            <span class="toolbar-title">Blood Sugar Register</span>
+            <span class="toolbar-subtitle">
+              All values should be entered in mg/dL.
+            </span>
+          </div>
 
-          <td>
-            <button
-              type="button"
-              class="submit-btn"
-              (click)="submitSugar(patient)"
-              [disabled]="patient.saving"
-            >
-              {{ patient.saving ? "Saving..." : isAdmin ? "Update" : "Submit" }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <span class="unit-badge">Unit: mg/dL</span>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Bed No.</th>
+                <th scope="col">Patient Details</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Blood Sugar</th>
+                <th scope="col" *ngIf="isAdmin">Treatment</th>
+                <th scope="col" class="action-column">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let patient of patients">
+                <td>
+                  <span class="bed-badge">
+                    {{ patient.bed_no || '—' }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="patient-cell">
+                    <span class="patient-avatar" aria-hidden="true">
+                      {{ patient.name ? (patient.name.trim().charAt(0) | uppercase) : 'P' }}
+                    </span>
+                    <div class="patient-info">
+                      <span class="patient-name">{{ patient.name || 'Unnamed Patient' }}</span>
+                      <span class="patient-id">
+                        ID: {{ patient.patient_id }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="detail-text">
+{{ patient.age !== null && patient.age !== undefined ? patient.age + ' yrs' : '—' }}                  </span>
+                </td>
+
+                <td>
+                  <span class="gender-text">{{ patient.gender || '—' }}</span>
+                </td>
+
+                <td>
+                  <div class="input-with-unit">
+                    <input
+                      class="table-input sugar-input"
+                      type="number"
+                      min="1"
+                      max="2000"
+                      step="0.01"
+                      [(ngModel)]="patient.sugar"
+                      [name]="'sugar_' + patient.patient_id"
+                      [id]="'sugar_' + patient.patient_id"
+                      placeholder="Enter value"
+                      [attr.aria-label]="'Blood sugar in mg/dL for ' + patient.name"
+                      required
+                    />
+                    <span class="input-unit">mg/dL</span>
+                  </div>
+                </td>
+
+                <td *ngIf="isAdmin">
+                  <input
+                    class="table-input treatment-input"
+                    type="text"
+                    [(ngModel)]="patient.treatments"
+                    [name]="'treatment_' + patient.patient_id"
+                    [id]="'treatment_' + patient.patient_id"
+                    placeholder="Enter treatment"
+                    [attr.aria-label]="'Treatment for ' + patient.name"
+                  />
+                </td>
+
+                <td class="action-column">
+                  <button
+                    type="button"
+                    class="submit-btn"
+                    (click)="submitSugar(patient)"
+                    [disabled]="patient.saving"
+                  >
+                    <svg
+                      *ngIf="!patient.saving"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="m5 12 4 4L19 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>
+                      {{ patient.saving ? 'Saving...' : isAdmin ? 'Update' : 'Submit' }}
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <span>Showing {{ patients.length }} patient record(s)</span>
+          <span class="footer-note">
+            <span class="required-dot">*</span>
+            Enter a valid reading before saving.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Information Note -->
+    <div class="info-note">
+      <span class="info-symbol" aria-hidden="true">i</span>
+      <p>
+        <strong>Important:</strong>
+        Verify each patient's reading before saving. This page records values;
+        it does not independently diagnose a medical condition.
+      </p>
+    </div>
+
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApicontrollerService } from '../../../controller/apicontroller.service';
 
 interface PatientSugar {
@@ -34,7 +34,11 @@ export class PatientSugarComponent implements OnInit {
     return this.role === 'ADMIN';
   }
 
-  constructor(private api: ApicontrollerService) {}
+  constructor(private api: ApicontrollerService,private router: Router) {
+
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+  }
 
   ngOnInit(): void {
     this.fetchPatients();
@@ -133,4 +137,28 @@ export class PatientSugarComponent implements OnInit {
       patient.saving = false;
     }
   }
+
+
+  
+isMenuOpen = false;
+
+toggleMenu(): void {
+  this.isMenuOpen = !this.isMenuOpen;
+}
+
+closeMenu(): void {
+  this.isMenuOpen = false;
+}
+
+logout(): void {
+  this.closeMenu();
+
+  // Replace this with your project's existing logout/auth service
+  // if you have one.
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+
+  this.router.navigate(['/login']);
+}
+
 }

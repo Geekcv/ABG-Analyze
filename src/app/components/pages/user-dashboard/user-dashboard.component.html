@@ -6,7 +6,21 @@
       <span>ABG<span class="brand-highlight">Analyzer</span></span>
     </a>
 
-    <div class="nav-right">
+    
+<button
+  type="button"
+  class="menu-toggle"
+  (click)="isMenuOpen = !isMenuOpen"
+  [attr.aria-expanded]="isMenuOpen"
+  aria-label="Toggle sidebar"
+>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+
+    <!-- <div class="nav-right">
       <div class="user-profile">
         <div class="avatar">
           {{ userName ? userName.charAt(0).toUpperCase() : "U" }}
@@ -22,8 +36,65 @@
         <span>↪</span>
         Logout
       </button>
-    </div>
+    </div> -->
   </header>
+
+  <!-- Navigation overlay -->
+  <div
+    class="sidebar-overlay"
+    *ngIf="isMenuOpen"
+    (click)="isMenuOpen = false"
+  ></div>
+
+  <!-- Workspace Sidebar -->
+  <aside class="workspace-sidebar" [class.open]="isMenuOpen">
+    <div class="sidebar-heading">WORKSPACE MENU</div>
+
+    <nav class="workspace-nav">
+      <a
+        routerLink="/user-dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="isMenuOpen = false"
+      >
+        <span>▦</span> Dashboard
+      </a>
+
+      <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+      <!-- <a routerLink="/patient-history" (click)="isMenuOpen = false">
+        <span>◷</span> Patient History
+      </a> -->
+    </nav>
+
+    <div class="sidebar-account">
+      <div class="sidebar-avatar">
+        {{ userName ? userName.charAt(0).toUpperCase() : "U" }}
+      </div>
+      <div>
+        <strong>{{ userName }}</strong>
+        <small>Standard User</small>
+      </div>
+    </div>
+  </aside>
 
   <!-- Main Content -->
   <main class="content">
@@ -94,8 +165,7 @@
     </section>
 
     <section class="workspace-grid">
-
-       <!-- <article class="analyzer-card">
+      <!-- <article class="analyzer-card">
         <div class="card-top">
           <div class="analyzer-icon">🩺</div>
           <span class="available-badge">
@@ -117,7 +187,6 @@
 
         <div class="card-decoration"></div>
       </article> -->
-
 
       <!-- Main Analyzer Card -->
       <article class="analyzer-card">

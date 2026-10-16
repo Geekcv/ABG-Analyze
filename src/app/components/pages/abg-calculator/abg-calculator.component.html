@@ -1,17 +1,107 @@
+<!-- Professional Responsive Header -->
 <header class="navbar">
-  <a routerLink="/user-dashboard" class="back-btn">
-    <span>←</span>
-    <span>Back to Home</span>
-  </a>
+  <div class="nav-inner">
+<!-- 
+    <a routerLink="/user-dashboard" class="brand">
+      <span class="brand-icon">+</span>
+      <span>ABG Analyzer</span>
+    </a> -->
+
+    
+    <a routerLink="/user-dashboard" class="back-link">
+        <span class="back-icon">←</span>
+        <span>Back </span>
+      </a>
+
+    <div class="nav-actions">
+     
+      
+    <button
+      type="button"
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+
+    </div>
+
+    
+
+
+  </div>
 </header>
 
-<div class="page-layout">
+<!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
+
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  <div class="menu-heading">
+    <span>Navigation</span>
+    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
+      ×
+    </button> -->
+  </div>
+
+    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
+<!-- Calculator Page -->
+<div class="page-layout" id="calculator">
   <main class="calculator-section">
+
+    <div class="page-heading">
+      <span class="eyebrow">CLINICAL TOOLS</span>
+      <h1>ABG Analysis Calculator</h1>
+      <p>Enter blood gas values to calculate and review the analysis.</p>
+    </div>
+
+    <div class="medical-notice">
+      <span class="notice-icon">ⓘ</span>
+      <p>
+        Enter values carefully and verify the results with clinical findings.
+        This calculator is an aid and does not replace professional medical judgment.
+      </p>
+    </div>
+
+    <!-- Keep your existing form and all its input fields here -->
     <form #abgForm="ngForm" (ngSubmit)="calculate()" novalidate>
+
       <!-- pH -->
       <div class="form-row">
-        <label for="ph">pH</label>
-
+        <label for="ph">pH <span class="required-mark">*</span></label>
         <div class="field-control">
           <input
             id="ph"
@@ -19,18 +109,15 @@
             type="number"
             [(ngModel)]="ph"
             (ngModelChange)="validateField('ph')"
-            placeholder="Norm: 7.35 - 7.45"
+            placeholder="Normal: 7.35 – 7.45"
             min="0"
             max="14"
             step="0.01"
             [class.invalid-input]="!!errors.ph"
+            [attr.aria-invalid]="!!errors.ph"
             required
           />
-
-          <small class="error" *ngIf="errors.ph">
-            {{ errors.ph }}
-          </small>
-
+          <small class="error" *ngIf="errors.ph">{{ errors.ph }}</small>
           <small class="warning" *ngIf="!errors.ph && referenceWarnings.ph">
             {{ referenceWarnings.ph }}
           </small>
@@ -39,8 +126,7 @@
 
       <!-- PaCO2 -->
       <div class="form-row">
-        <label for="paco2">PaCO₂</label>
-
+        <label for="paco2">PaCO₂ <span class="required-mark">*</span></label>
         <div class="field-control">
           <div class="input-unit">
             <input
@@ -49,34 +135,24 @@
               type="number"
               [(ngModel)]="paco2"
               (ngModelChange)="validateField('paco2')"
-              [placeholder]="'Norm: ' + ranges.paco2"
+              [placeholder]="'Normal: ' + ranges.paco2"
               step="0.01"
               [class.invalid-input]="!!errors.paco2"
+              [attr.aria-invalid]="!!errors.paco2"
               required
             />
-
             <button
               type="button"
               class="unit-button"
               (click)="changeUnit('paco2')"
-              [attr.aria-label]="
-                'Change PaCO2 unit. Current unit: ' + units.paco2
-              "
+              [attr.aria-label]="'Change PaCO2 unit. Current unit: ' + units.paco2"
               title="Change unit"
             >
-              {{ units.paco2 }}
-              <span class="switch-icon">⇄</span>
+              {{ units.paco2 }} <span class="switch-icon">⇄</span>
             </button>
           </div>
-
-          <small class="error" *ngIf="errors.paco2">
-            {{ errors.paco2 }}
-          </small>
-
-          <small
-            class="warning"
-            *ngIf="!errors.paco2 && referenceWarnings.paco2"
-          >
+          <small class="error" *ngIf="errors.paco2">{{ errors.paco2 }}</small>
+          <small class="warning" *ngIf="!errors.paco2 && referenceWarnings.paco2">
             {{ referenceWarnings.paco2 }}
           </small>
         </div>
@@ -84,8 +160,7 @@
 
       <!-- HCO3 -->
       <div class="form-row">
-        <label for="hco3">HCO₃⁻</label>
-
+        <label for="hco3">HCO₃⁻ <span class="required-mark">*</span></label>
         <div class="field-control">
           <div class="input-unit">
             <input
@@ -94,27 +169,17 @@
               type="number"
               [(ngModel)]="hco3"
               (ngModelChange)="validateField('hco3')"
-              [placeholder]="'Norm: ' + ranges.hco3"
+              [placeholder]="'Normal: ' + ranges.hco3"
               step="0.1"
               [class.invalid-input]="!!errors.hco3"
+              [attr.aria-invalid]="!!errors.hco3"
               required
             />
-
-            <button
-              type="button"
-              class="unit-button"
-              (click)="changeUnit('hco3')"
-              title="Change unit"
-            >
-              {{ units.hco3 }}
-              <span class="switch-icon">⇄</span>
+            <button type="button" class="unit-button" (click)="changeUnit('hco3')" title="Change unit">
+              {{ units.hco3 }} <span class="switch-icon">⇄</span>
             </button>
           </div>
-
-          <small class="error" *ngIf="errors.hco3">
-            {{ errors.hco3 }}
-          </small>
-
+          <small class="error" *ngIf="errors.hco3">{{ errors.hco3 }}</small>
           <small class="warning" *ngIf="!errors.hco3 && referenceWarnings.hco3">
             {{ referenceWarnings.hco3 }}
           </small>
@@ -124,7 +189,6 @@
       <!-- Sodium -->
       <div class="form-row">
         <label for="sodium">Sodium</label>
-
         <div class="field-control">
           <div class="input-unit">
             <input
@@ -133,30 +197,16 @@
               type="number"
               [(ngModel)]="sodium"
               (ngModelChange)="validateField('sodium')"
-              [placeholder]="'Norm: ' + ranges.sodium"
+              [placeholder]="'Normal: ' + ranges.sodium"
               step="0.1"
               [class.invalid-input]="!!errors.sodium"
             />
-
-            <button
-              type="button"
-              class="unit-button"
-              (click)="changeUnit('sodium')"
-              title="Change unit"
-            >
-              {{ units.sodium }}
-              <span class="switch-icon">⇄</span>
+            <button type="button" class="unit-button" (click)="changeUnit('sodium')" title="Change unit">
+              {{ units.sodium }} <span class="switch-icon">⇄</span>
             </button>
           </div>
-
-          <small class="error" *ngIf="errors.sodium">
-            {{ errors.sodium }}
-          </small>
-
-          <small
-            class="warning"
-            *ngIf="!errors.sodium && referenceWarnings.sodium"
-          >
+          <small class="error" *ngIf="errors.sodium">{{ errors.sodium }}</small>
+          <small class="warning" *ngIf="!errors.sodium && referenceWarnings.sodium">
             {{ referenceWarnings.sodium }}
           </small>
         </div>
@@ -165,7 +215,6 @@
       <!-- Chloride -->
       <div class="form-row">
         <label for="chloride">Chloride</label>
-
         <div class="field-control">
           <div class="input-unit">
             <input
@@ -174,30 +223,16 @@
               type="number"
               [(ngModel)]="chloride"
               (ngModelChange)="validateField('chloride')"
-              [placeholder]="'Norm: ' + ranges.chloride"
+              [placeholder]="'Normal: ' + ranges.chloride"
               step="0.1"
               [class.invalid-input]="!!errors.chloride"
             />
-
-            <button
-              type="button"
-              class="unit-button"
-              (click)="changeUnit('chloride')"
-              title="Change unit"
-            >
-              {{ units.chloride }}
-              <span class="switch-icon">⇄</span>
+            <button type="button" class="unit-button" (click)="changeUnit('chloride')" title="Change unit">
+              {{ units.chloride }} <span class="switch-icon">⇄</span>
             </button>
           </div>
-
-          <small class="error" *ngIf="errors.chloride">
-            {{ errors.chloride }}
-          </small>
-
-          <small
-            class="warning"
-            *ngIf="!errors.chloride && referenceWarnings.chloride"
-          >
+          <small class="error" *ngIf="errors.chloride">{{ errors.chloride }}</small>
+          <small class="warning" *ngIf="!errors.chloride && referenceWarnings.chloride">
             {{ referenceWarnings.chloride }}
           </small>
         </div>
@@ -207,11 +242,8 @@
       <div class="form-row albumin-row">
         <div class="field-label">
           <label for="albumin">Albumin</label>
-          <small class="field-note">
-            Normal albumin is typically around 4 g/dL or 40 g/L.
-          </small>
+          <small class="field-note">Typical reference: around 4 g/dL or 40 g/L.</small>
         </div>
-
         <div class="field-control">
           <div class="input-unit">
             <input
@@ -220,48 +252,48 @@
               type="number"
               [(ngModel)]="albumin"
               (ngModelChange)="validateField('albumin')"
-              [placeholder]="'Norm: ' + ranges.albumin"
+              [placeholder]="'Normal: ' + ranges.albumin"
               step="0.1"
               [class.invalid-input]="!!errors.albumin"
             />
-
-            <button
-              type="button"
-              class="unit-button"
-              (click)="changeUnit('albumin')"
-              title="Change unit"
-            >
-              {{ units.albumin }}
-              <span class="switch-icon">⇄</span>
+            <button type="button" class="unit-button" (click)="changeUnit('albumin')" title="Change unit">
+              {{ units.albumin }} <span class="switch-icon">⇄</span>
             </button>
           </div>
-
-          <small class="error" *ngIf="errors.albumin">
-            {{ errors.albumin }}
-          </small>
-
-          <small
-            class="warning"
-            *ngIf="!errors.albumin && referenceWarnings.albumin"
-          >
+          <small class="error" *ngIf="errors.albumin">{{ errors.albumin }}</small>
+          <small class="warning" *ngIf="!errors.albumin && referenceWarnings.albumin">
             {{ referenceWarnings.albumin }}
           </small>
         </div>
       </div>
 
-      <button class="calculate-btn" type="submit">Calculate ABG</button>
+      <button class="calculate-btn" type="submit">
+        <span>Calculate ABG</span>
+        <span aria-hidden="true">→</span>
+      </button>
     </form>
 
     <!-- Results -->
-    <section class="result-panel" id="results">
+    <section class="result-panel" id="results" aria-live="polite">
       <div class="result-header">
-        <h2>Result:</h2>
+        <div>
+          <span class="eyebrow result-eyebrow">ANALYSIS SUMMARY</span>
+          <h2>Calculation Results</h2>
+        </div>
+        <span class="result-status" *ngIf="result">Ready</span>
+      </div>
 
-        <span *ngIf="!result"> Please fill out required fields. </span>
+      <div class="result-empty" *ngIf="!result">
+        <span class="empty-icon">＋</span>
+        <h3>Your results will appear here</h3>
+        <p>Enter the required values above and select Calculate ABG.</p>
       </div>
 
       <div class="result-content" *ngIf="result">
-        <h3>Final Result:- {{ result }}</h3>
+        <div class="final-result">
+          <span>Final result</span>
+          <h3>{{ result }}</h3>
+        </div>
 
         <div class="result-item" *ngIf="anionGap !== null">
           <span>Anion Gap</span>
@@ -273,6 +305,12 @@
           <strong>{{ correctedAnionGap }} mmol/L</strong>
         </div>
       </div>
+
+      <p class="result-disclaimer">
+        Results should be interpreted alongside the patient's clinical condition
+        and other relevant investigations.
+      </p>
     </section>
+
   </main>
 </div>

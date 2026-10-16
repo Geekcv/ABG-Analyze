@@ -2,15 +2,81 @@
 <div class="patient-page">
   
 
-  <header class="page-header">
-    <a routerLink="/patient-blood-sugar" class="back-link">
-    ← Back to Patient Dashboard
+
+<header class="page-header">
+
+  <!-- Left: Back Button -->
+  <a routerLink="/patient-blood-sugar" class="back-link">
+    <span class="back-icon">←</span>
+    <span>Back</span>
   </a>
-  <br>
-    <span class="eyebrow">PATIENT MANAGEMENT</span>
+
+  <!-- Center: Registration Title -->
+  <div class="header-content">
     <h1>Register New Patient</h1>
     <p>Enter patient information to continue with blood sugar analysis.</p>
-  </header>
+  </div>
+
+  <!-- Right: Hamburger Button -->
+  <div class="nav-actions">
+    <button
+      type="button"
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+</header>
+
+
+  <!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
+
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  <div class="menu-heading">
+    <span>Navigation</span>
+    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
+      ×
+    </button> -->
+  </div>
+
+    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
+  
 
   <form class="patient-form" #patientForm="ngForm"
         (ngSubmit)="savePatient(patientForm)">

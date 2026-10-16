@@ -1,25 +1,79 @@
 <div class="patient-page">
 
-  <header class="page-header">
-    <div>
-        <a routerLink="/patient-blood-sugar" class="back-link">
-    ← Back to Patient Dashboard
-  </a>
-<br>
-      <span class="eyebrow">PATIENT MANAGEMENT</span>
-      <h1>Old Patients</h1>
-      <p>Select an existing patient to continue with blood sugar analysis.</p>
-    </div>
 
+<header class="page-header">
+
+  <!-- Back Button - Left -->
+  <a routerLink="/patient-blood-sugar" class="back-link">
+    <span class="back-icon">←</span>
+    <span>Back</span>
+  </a>
+
+  <!-- Page Title - Center -->
+  <div class="header-content">
+    <h1>Old Patients</h1>
+    <p>Select an existing patient to continue with blood sugar analysis.</p>
+  </div>
+
+  <!-- Hamburger Menu - Right -->
+  <div class="nav-actions">
     <button
       type="button"
-      class="refresh-btn"
-      (click)="fetchPatients()"
-      [disabled]="loading"
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
     >
-      {{ loading ? "Loading..." : "↻ Refresh" }}
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
-  </header>
+  </div>
+
+</header>
+
+
+  <!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
+
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  <div class="menu-heading">
+    <span>Navigation</span>
+    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
+      ×
+    </button> -->
+  </div>
+
+    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
 
   <!-- Search and Date Filters -->
   <section class="patient-toolbar">

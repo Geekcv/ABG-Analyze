@@ -113,4 +113,27 @@ private getCurrentDateTime(): string {
     this.errorMessage = '';
     form.resetForm(this.patient);
   }
+
+
+    
+isMenuOpen = false;
+
+toggleMenu(): void {
+  this.isMenuOpen = !this.isMenuOpen;
+}
+
+closeMenu(): void {
+  this.isMenuOpen = false;
+}
+
+logout(): void {
+  this.closeMenu();
+
+  // Replace this with your project's existing logout/auth service
+  // if you have one.
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+
+  this.router.navigate(['/login']);
+}
 }
