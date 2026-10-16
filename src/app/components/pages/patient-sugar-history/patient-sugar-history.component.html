@@ -4,39 +4,89 @@
 
     <!-- Page Header -->
     <header class="page-header">
-      <div class="header-main">
         <a routerLink="/patient-blood-sugar" class="back-link">
           <span class="back-icon" aria-hidden="true">←</span>
-          <span>Back to Patient Dashboard</span>
+          <span>Back </span>
         </a>
 
-        <div class="title-row">
-          <div class="title-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M4 19V5M4 19h16M7 15l4-4 3 2 5-7"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <circle cx="19" cy="6" r="1.5" fill="currentColor" />
-            </svg>
-          </div>
 
           <div class="title-copy">
             <span class="eyebrow">PATIENT MANAGEMENT</span>
             <h1>Patient Sugar History</h1>
             <p>Review previously saved blood sugar readings and their timestamps.</p>
           </div>
-        </div>
-      </div>
 
-      <div class="header-status" *ngIf="!loading && patient && !errorMessage">
-        <span class="status-dot"></span>
-        History available
-      </div>
+
+            <!-- Hamburger Menu - Right -->
+  <div class="nav-actions">
+    <button
+      type="button"
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+      
     </header>
+
+
+    <!-- Mobile / Desktop Navigation Menu -->
+<div
+  class="menu-backdrop"
+  *ngIf="isMenuOpen"
+  (click)="closeMenu()"
+></div>
+
+<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+  
+<div class="menu-heading">
+  <span>Navigation</span>
+  <button
+    type="button"
+    class="menu-close"
+    (click)="closeMenu()"
+    aria-label="Close navigation menu"
+  >
+    ×
+  </button>
+</div>
+
+<a routerLink="/user-dashboard" (click)="closeMenu()">
+  <span>📊</span>  Dashboard
+</a>
+
+    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
+        <span>🩺</span> ABG Analyzer
+      </a>
+
+      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
+        <span>🩸</span> Patient Blood Sugar
+      </a>
+
+      <a routerLink="/new-patient" (click)="isMenuOpen = false">
+        <span>＋</span> Add New Patient
+      </a>
+
+      <a routerLink="/old-patients" (click)="isMenuOpen = false">
+        <span>♙</span> All Patients
+      </a>
+
+      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
+        <span>📋</span> Current Sugar Records
+      </a>
+
+  <button type="button" class="menu-logout" (click)="logout()">
+    <span class="menu-icon">↪</span>
+    Logout
+  </button>
+</nav>
+
 
     <!-- Loading State -->
     <div *ngIf="loading" class="state-card loading-state">

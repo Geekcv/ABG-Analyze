@@ -46,12 +46,24 @@
 ></div>
 
 <nav class="navigation-menu" [class.menu-open]="isMenuOpen">
-  <div class="menu-heading">
-    <span>Navigation</span>
-    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
-      ×
-    </button> -->
-  </div>
+ <div class="menu-heading">
+  <span>Navigation</span>
+
+  <button
+    type="button"
+    class="menu-close"
+    (click)="closeMenu()"
+    aria-label="Close navigation menu"
+  >
+    ×
+  </button>
+</div>
+
+
+<a routerLink="/user-dashboard" (click)="closeMenu()">
+  <span>📊</span>  Dashboard
+</a>
+
   <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
         <span>🩺</span> ABG Analyzer
       </a>

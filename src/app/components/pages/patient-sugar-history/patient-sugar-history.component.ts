@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApicontrollerService } from '../../../controller/apicontroller.service';
 
 interface SugarRecord {
@@ -28,6 +28,7 @@ export class PatientSugarHistoryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private api: ApicontrollerService
   ) {}
 
@@ -75,4 +76,27 @@ export class PatientSugarHistoryComponent implements OnInit {
       this.loading = false;
     }
   }
+
+  
+isMenuOpen = false;
+
+toggleMenu(): void {
+  this.isMenuOpen = !this.isMenuOpen;
+}
+
+closeMenu(): void {
+  this.isMenuOpen = false;
+}
+
+logout(): void {
+  this.closeMenu();
+
+  // Replace this with your project's existing logout/auth service
+  // if you have one.
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+
+  this.router.navigate(['/login']);
+}
+
 }

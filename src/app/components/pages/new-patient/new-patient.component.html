@@ -1,239 +1,306 @@
-
 <div class="patient-page">
-  
 
+  <!-- Page Header -->
+  <header class="page-header">
+    <a routerLink="/patient-blood-sugar" class="back-link">
+      <span class="back-icon" aria-hidden="true">←</span>
+      <span>Back</span>
+    </a>
 
-<header class="page-header">
+    <div class="header-content">
+      <span class="page-eyebrow">PATIENT MANAGEMENT</span>
+      <h1>Register New Patient</h1>
+      <p>Enter patient information to continue with blood sugar analysis.</p>
+    </div>
 
-  <!-- Left: Back Button -->
-  <a routerLink="/patient-blood-sugar" class="back-link">
-    <span class="back-icon">←</span>
-    <span>Back</span>
-  </a>
+    <div class="nav-actions">
+      <button
+        type="button"
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
 
-  <!-- Center: Registration Title -->
-  <div class="header-content">
-    <h1>Register New Patient</h1>
-    <p>Enter patient information to continue with blood sugar analysis.</p>
-  </div>
+  <!-- Backdrop -->
+  <div
+    class="menu-backdrop"
+    *ngIf="isMenuOpen"
+    (click)="closeMenu()"
+  ></div>
 
-  <!-- Right: Hamburger Button -->
-  <div class="nav-actions">
-    <button
-      type="button"
-      class="menu-toggle"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="isMenuOpen"
-      aria-label="Toggle navigation menu"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
+  <!-- Right Sidebar -->
+  <nav class="navigation-menu" [class.menu-open]="isMenuOpen">
+    <div class="sidebar-header">
+      <div>
+        <span class="sidebar-eyebrow">PATIENT SYSTEM</span>
+        <h2>Navigation</h2>
+      </div>
+
+      <button
+        type="button"
+        class="menu-close"
+        (click)="closeMenu()"
+        aria-label="Close navigation menu"
+      >
+        ×
+      </button>
+    </div>
+
+    <a routerLink="/user-dashboard" (click)="closeMenu()">
+  <span>📊</span>  Dashboard
+</a>
+
+    <a routerLink="/abg-calculator" (click)="closeMenu()">
+      <span class="nav-icon">🩺</span>
+      <span>ABG Analyzer</span>
+    </a>
+
+    <a routerLink="/patient-blood-sugar" (click)="closeMenu()">
+      <span class="nav-icon">🩸</span>
+      <span>Patient Blood Sugar</span>
+    </a>
+
+    <a routerLink="/new-patient" (click)="closeMenu()" class="active">
+      <span class="nav-icon">＋</span>
+      <span>Add New Patient</span>
+    </a>
+
+    <a routerLink="/old-patients" (click)="closeMenu()">
+      <span class="nav-icon">♙</span>
+      <span>All Patients</span>
+    </a>
+
+    <a routerLink="/patient-current-sugar" (click)="closeMenu()">
+      <span class="nav-icon">📋</span>
+      <span>Current Sugar Records</span>
+    </a>
+
+    <button type="button" class="menu-logout" (click)="logout()">
+      <span class="nav-icon">↪</span>
+      <span>Logout</span>
     </button>
-  </div>
+  </nav>
 
-</header>
+  <!-- Main Content -->
+  <main class="patient-main">
 
+    <div class="form-intro">
+      <div>
+        <h2>Patient Details</h2>
+        <p>Complete the required information below to register a patient.</p>
+      </div>
 
-  <!-- Mobile / Desktop Navigation Menu -->
-<div
-  class="menu-backdrop"
-  *ngIf="isMenuOpen"
-  (click)="closeMenu()"
-></div>
+      <div class="required-note">
+        <span>*</span> Required fields
+      </div>
+    </div>
 
-<nav class="navigation-menu" [class.menu-open]="isMenuOpen">
-  <div class="menu-heading">
-    <span>Navigation</span>
-    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
-      ×
-    </button> -->
-  </div>
+    <form
+      class="patient-form"
+      #patientForm="ngForm"
+      (ngSubmit)="savePatient(patientForm)"
+      novalidate
+    >
 
-    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
-        <span>🩺</span> ABG Analyzer
-      </a>
-
-      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
-        <span>🩸</span> Patient Blood Sugar
-      </a>
-
-      <a routerLink="/new-patient" (click)="isMenuOpen = false">
-        <span>＋</span> Add New Patient
-      </a>
-
-      <a routerLink="/old-patients" (click)="isMenuOpen = false">
-        <span>♙</span> All Patients
-      </a>
-
-      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
-        <span>📋</span> Current Sugar Records
-      </a>
-
-  <button type="button" class="menu-logout" (click)="logout()">
-    <span class="menu-icon">↪</span>
-    Logout
-  </button>
-</nav>
-
-  
-
-  <form class="patient-form" #patientForm="ngForm"
-        (ngSubmit)="savePatient(patientForm)">
-
-    <div class="form-section">
-      <h2>Personal Information</h2>
-      <p class="section-description">Basic details of the patient.</p>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="name">Patient Name <span>*</span></label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            [(ngModel)]="patient.name"
-            placeholder="Enter full name"
-            required
-            maxlength="100"
-          />
+      <!-- Personal Information -->
+      <section class="form-section">
+        <div class="section-heading">
+          <div class="section-icon personal-icon">♙</div>
+          <div>
+            <h2>Personal Information</h2>
+            <p>Basic details of the patient.</p>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="age">Age <span>*</span></label>
-          <input
-            id="age"
-            name="age"
-            type="number"
-            [(ngModel)]="patient.age"
-            placeholder="Enter age"
-            min="0"
-            max="120"
-            required
-          />
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="name">Patient Name <span>*</span></label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              [(ngModel)]="patient.name"
+              placeholder="Enter full name"
+              autocomplete="name"
+              maxlength="100"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="age">Age <span>*</span></label>
+            <input
+              id="age"
+              name="age"
+              type="number"
+              [(ngModel)]="patient.age"
+              placeholder="Enter age"
+              min="0"
+              max="120"
+              step="1"
+              inputmode="numeric"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender <span>*</span></label>
+            <select
+              id="gender"
+              name="gender"
+              [(ngModel)]="patient.gender"
+              required
+            >
+              <option value="" disabled>Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Hospital Information -->
+      <section class="form-section">
+        <div class="section-heading">
+          <div class="section-icon hospital-icon">✚</div>
+          <div>
+            <h2>Hospital Information</h2>
+            <p>Admission, bed allocation and diagnosis details.</p>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="gender">Gender <span>*</span></label>
-          <select
-            id="gender"
-            name="gender"
-            [(ngModel)]="patient.gender"
-            required
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="ipdNo">IPD Number <span>*</span></label>
+            <input
+              id="ipdNo"
+              name="ipdNo"
+              type="text"
+              [(ngModel)]="patient.ipdNo"
+              placeholder="Enter IPD number"
+              maxlength="50"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="bedNo">Bed Number <span>*</span></label>
+            <input
+              id="bedNo"
+              name="bedNo"
+              type="text"
+              [(ngModel)]="patient.bedNo"
+              placeholder="Enter bed number"
+              maxlength="50"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="admittedAt">Admission Date &amp; Time <span>*</span></label>
+            <input
+              id="admittedAt"
+              name="admittedAt"
+              type="datetime-local"
+              [(ngModel)]="patient.admittedAt"
+              [max]="patient.dischargedAt || null"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="dischargedAt">Discharge Date &amp; Time</label>
+            <input
+              id="dischargedAt"
+              name="dischargedAt"
+              type="datetime-local"
+              [(ngModel)]="patient.dischargedAt"
+              [min]="patient.admittedAt || null"
+            />
+            <small class="field-hint">
+              Optional. Leave empty if the patient is still admitted.
+            </small>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="diagnosis">Diagnosis <span>*</span></label>
+            <textarea
+              id="diagnosis"
+              name="diagnosis"
+              [(ngModel)]="patient.diagnosis"
+              placeholder="Enter diagnosis or provisional diagnosis"
+              rows="3"
+              maxlength="2000"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="oldHistory">Previous Medical History</label>
+            <textarea
+              id="oldHistory"
+              name="oldHistory"
+              [(ngModel)]="patient.oldHistory"
+              placeholder="Previous illnesses, medical conditions, medications, allergies..."
+              rows="3"
+              maxlength="5000"
+            ></textarea>
+            <small class="field-hint">
+              Optional. Include relevant past medical history.
+            </small>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Form Footer -->
+      <footer class="form-footer">
+        <p class="footer-note">
+          <span>*</span> Indicates a required field
+        </p>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="resetForm(patientForm)"
+            [disabled]="saving"
           >
-            <option value="" disabled>Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+            Clear Form
+          </button>
+
+          <button
+            type="submit"
+            class="primary-btn"
+            [disabled]="patientForm.invalid || saving"
+          >
+            {{ saving ? 'Saving...' : 'Save Patient →' }}
+          </button>
         </div>
-      </div>
-    </div>
+      </footer>
 
-    <div class="form-section">
-      <h2>Hospital Information</h2>
-      <p class="section-description">Patient admission and bed details.</p>
+      <!-- Feedback Messages -->
+      <p *ngIf="message" class="success-message" role="status">
+        <span aria-hidden="true">✓</span>
+        {{ message }}
+      </p>
 
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="ipdNo">IPD Number <span>*</span></label>
-          <input
-            id="ipdNo"
-            name="ipdNo"
-            type="text"
-            [(ngModel)]="patient.ipdNo"
-            placeholder="Enter IPD number"
-            required
-            maxlength="50"
-          />
-        </div>
+      <p *ngIf="errorMessage" class="error-message" role="alert">
+        <span aria-hidden="true">!</span>
+        {{ errorMessage }}
+      </p>
 
-        <div class="form-group">
-          <label for="bedNo">Bed Number <span>*</span></label>
-          <input
-            id="bedNo"
-            name="bedNo"
-            type="text"
-            [(ngModel)]="patient.bedNo"
-            placeholder="Enter bed number"
-            required
-            maxlength="50"
-          />
-        </div>
-
-        <div class="form-group">
-  <label for="admittedAt">Admission Date & Time <span>*</span></label>
-  <input
-    id="admittedAt"
-    name="admittedAt"
-    type="datetime-local"
-    [(ngModel)]="patient.admittedAt"
-    required
-  />
-</div>
-
-<div class="form-group">
-  <label for="dischargedAt">Discharge Date & Time</label>
-  <input
-    id="dischargedAt"
-    name="dischargedAt"
-    type="datetime-local"
-    [(ngModel)]="patient.dischargedAt"
-    [min]="patient.admittedAt"
-  />
-  <small>Optional — leave empty if the patient is still admitted.</small>
-</div>
-
-        <div class="form-group full-width">
-          <label for="diagnosis">Diagnosis <span>*</span></label>
-          <textarea
-            id="diagnosis"
-            name="diagnosis"
-            [(ngModel)]="patient.diagnosis"
-            placeholder="Enter diagnosis or provisional diagnosis"
-            rows="3"
-            required
-            maxlength="2000"
-          ></textarea>
-        </div>
-
-        <div class="form-group full-width">
-          <label for="oldHistory">Old Medical History</label>
-          <textarea
-            id="oldHistory"
-            name="oldHistory"
-            [(ngModel)]="patient.oldHistory"
-            placeholder="Previous illnesses, medical conditions, medications, allergies..."
-            rows="4"
-            maxlength="5000"
-          ></textarea>
-          <small>Optional — enter relevant past medical history.</small>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-footer">
-      <p><span>*</span> Required fields</p>
-
-      <div class="form-actions">
-        <button type="button" class="secondary-btn"
-                (click)="resetForm(patientForm)">
-          Clear Form
-        </button>
-
-        <button type="submit" class="primary-btn"
-                [disabled]="patientForm.invalid || saving">
-          {{ saving ? 'Saving...' : 'Save Patient →' }}
-        </button>
-      </div>
-    </div>
-
-    <p *ngIf="message" class="success-message" role="status">
-      {{ message }}
-    </p>
-
-    <p *ngIf="errorMessage" class="error-message" role="alert">
-      {{ errorMessage }}
-    </p>
-  </form>
+    </form>
+  </main>
 </div>

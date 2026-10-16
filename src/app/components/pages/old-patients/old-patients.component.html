@@ -33,7 +33,7 @@
 </header>
 
 
-  <!-- Mobile / Desktop Navigation Menu -->
+<!-- Navigation -->
 <div
   class="menu-backdrop"
   *ngIf="isMenuOpen"
@@ -41,32 +41,44 @@
 ></div>
 
 <nav class="navigation-menu" [class.menu-open]="isMenuOpen">
-  <div class="menu-heading">
-    <span>Navigation</span>
-    <!-- <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Close menu">
-      ×
-    </button> -->
-  </div>
+  
 
-    <a routerLink="/abg-calculator" (click)="isMenuOpen = false">
-        <span>🩺</span> ABG Analyzer
-      </a>
+  <div class="sidebar-header">
+  <h2 class="menu-heading">Navigation</h2>
 
-      <a routerLink="/patient-blood-sugar" (click)="isMenuOpen = false">
-        <span>🩸</span> Patient Blood Sugar
-      </a>
+  <button
+    type="button"
+    class="sidebar-close"
+    (click)="closeMenu()"
+    aria-label="Close sidebar"
+  >
+    ✕
+  </button>
+</div>
 
-      <a routerLink="/new-patient" (click)="isMenuOpen = false">
-        <span>＋</span> Add New Patient
-      </a>
+<a routerLink="/user-dashboard" (click)="closeMenu()">
+  <span>📊</span>  Dashboard
+</a>
 
-      <a routerLink="/old-patients" (click)="isMenuOpen = false">
-        <span>♙</span> All Patients
-      </a>
+  <a routerLink="/abg-calculator" (click)="closeMenu()">
+    <span>🩺</span> ABG Analyzer
+  </a>
 
-      <a routerLink="/patient-current-sugar" (click)="isMenuOpen = false">
-        <span>📋</span> Current Sugar Records
-      </a>
+  <a routerLink="/patient-blood-sugar" (click)="closeMenu()">
+    <span>🩸</span> Patient Blood Sugar
+  </a>
+
+  <a routerLink="/new-patient" (click)="closeMenu()">
+    <span>＋</span> Add New Patient
+  </a>
+
+  <a routerLink="/old-patients" (click)="closeMenu()">
+    <span>♙</span> All Patients
+  </a>
+
+  <a routerLink="/patient-current-sugar" (click)="closeMenu()">
+    <span>📋</span> Current Sugar Records
+  </a>
 
   <button type="button" class="menu-logout" (click)="logout()">
     <span class="menu-icon">↪</span>
