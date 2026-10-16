@@ -1,18 +1,26 @@
-
 <div class="welcome-page">
+
+  <!-- Navbar -->
   <header class="welcome-navbar">
-    <a class="welcome-brand" routerLink="/">
+    <a class="welcome-brand" routerLink="/" aria-label="Kirti Classess home">
       <img src="/logo.ico" alt="Kirti Classess logo" />
       <span>Kirti Classess</span>
     </a>
 
-    <a routerLink="/" class="nav-link">ABG Analyzer</a>
+    <a routerLink="/abg-calculator" class="nav-link">
+      <span class="nav-link-icon" aria-hidden="true">＋</span>
+      ABG Analyzer
+    </a>
   </header>
 
+  <!-- Main Content -->
   <main class="welcome-main">
-    <section class="welcome-card">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+
+    <section class="welcome-card" aria-labelledby="welcome-title">
+
+      <!-- Status Icon -->
+      <div class="success-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
           <path
             d="m5 12 4 4L19 6"
             fill="none"
@@ -26,7 +34,7 @@
 
       <span class="welcome-label">WELCOME TO KIRTI CLASSESS</span>
 
-      <h1>Welcome!</h1>
+      <h1 id="welcome-title">Welcome!</h1>
 
       <p class="welcome-message">
         We're glad you're here. Your learning journey starts here.
@@ -34,20 +42,48 @@
 
       <div class="welcome-divider"></div>
 
-      <h2>What would you like to do?</h2>
+      <div class="analyzer-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M3 12h4l3-8 4 16 3-8h4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+
+      <h2>Ready to get started?</h2>
 
       <p class="welcome-description">
-        Continue to the ABG Analyzer to explore the calculator.
+        Access the ABG Analyzer to calculate and review arterial blood gas
+        values with a simple, easy-to-use interface.
       </p>
 
-      <a routerLink="/" class="welcome-button">
-        Open ABG Analyzer
-        <span aria-hidden="true">→</span>
-      </a>
+      <a
+  href="javascript:void(0)"
+  class="welcome-button"
+  (click)="redirectByRole()"
+>
+  Open ABG Analyzer
+  <span aria-hidden="true">→</span>
+</a>
+
+      <p class="welcome-helper">
+        <span aria-hidden="true">✓</span>
+        Simple interface · Easy navigation
+      </p>
+
     </section>
 
-    <p class="welcome-copyright">
-      © {{ currentYear }} Kirti Classess. All rights reserved.
-    </p>
+    <!-- Footer -->
+    <footer class="welcome-footer">
+      <span>© {{ currentYear }} Kirti Classess</span>
+      <span class="footer-separator" aria-hidden="true">•</span>
+      <span>All rights reserved</span>
+    </footer>
+
   </main>
 </div>

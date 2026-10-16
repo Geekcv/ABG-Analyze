@@ -1,67 +1,96 @@
 <div class="dashboard">
   <!-- Sidebar -->
-  <aside class="sidebar" [class.sidebar-open]="isSidebarOpen">
-    <button
-      type="button"
-      class="mobile-menu-btn"
-      (click)="isSidebarOpen = !isSidebarOpen"
-      [attr.aria-expanded]="isSidebarOpen"
-      aria-label="Toggle sidebar menu"
-    >
-      ⋮
-    </button>
+  <aside
+    id="admin-sidebar"
+    class="sidebar"
+    [class.sidebar-open]="isSidebarOpen"
+  >
+    <div class="sidebar-brand">
+      <div class="brand-icon">A</div>
 
-    <a class="brand" routerLink="/admin-dashboard">
-      <span class="brand-icon">🩺</span>
-      <span>
-        <strong>ABG Analyzer</strong>
-        <small>ADMIN CONSOLE</small>
-      </span>
-    </a>
-
-    <div class="sidebar-label">WORKSPACE</div>
+      <div class="brand-text">
+        <h2>ABG Analyzer</h2>
+        <span>Admin Panel</span>
+      </div>
+    </div>
 
     <nav class="sidebar-nav">
-      <a routerLink="/admin-dashboard" class="nav-link active">
-        <span class="nav-icon">▦</span>
-        Dashboard
+      <p class="nav-section-title">MAIN MENU</p>
+
+      <a
+        routerLink="/admin-dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-item"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">⌂</span>
+        <span>Dashboard</span>
       </a>
 
       <a
-        routerLink="/patient-current-sugar"
+        routerLink="/admin-users"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-link"
+        class="nav-item"
+        (click)="closeSidebar()"
       >
-        <span class="nav-icon">♧</span>
-        All Patient Current Sugar
+        <span class="nav-icon">♙</span>
+        <span>Manage Users</span>
+      </a>
+
+      <a
+        routerLink="/admin-reports"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">▤</span>
+        <span>Reports</span>
+      </a>
+
+      <a
+        routerLink="/admin-settings"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="closeSidebar()"
+      >
+        <span class="nav-icon">⚙</span>
+        <span>Settings</span>
       </a>
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="admin-profile">
-        <div class="avatar">{{ adminName.charAt(0).toUpperCase() }}</div>
-        <div class="profile-info">
-          <strong>{{ adminName }}</strong>
-          <small>Administrator</small>
-        </div>
-        <span class="online-dot"></span>
-      </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-icon">✓</div>
 
-      <button class="logout" type="button" (click)="logout()">
-        <span>↪</span>
-        Sign out
-      </button>
+      <div>
+        <strong>System Status</strong>
+        <span>Admin workspace</span>
+      </div>
     </div>
+
+    <button type="button" class="sidebar-logout" (click)="logout()">
+      <span>↪</span>
+      Logout
+    </button>
   </aside>
 
-  <!-- Main content -->
+  <!-- Overlay for mobile -->
+  <div
+    class="sidebar-overlay"
+    [class.overlay-visible]="isSidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
+
+  <!-- Main Content -->
   <main class="main-content">
+    <!-- Sticky Header -->
     <header class="topbar">
       <div class="page-heading">
         <div class="breadcrumb">Workspace <span>/</span> Dashboard</div>
-        <h1>Dashboard overview</h1>
-        <p>Monitor users and manage your ABG Analyzer platform.</p>
+
+        <h1>Dashboard Overview</h1>
+
+        <p>Welcome back, {{ adminName }}. Manage your platform here.</p>
       </div>
 
       <div class="topbar-right">
@@ -69,168 +98,272 @@
           <span class="admin-chip-dot"></span>
           ADMIN ACCESS
         </div>
-        <!-- <button
-          class="top-logout"
+
+        <button
           type="button"
-          (click)="logout()"
-          aria-label="Sign out"
+          class="mobile-menu-btn"
+          (click)="toggleSidebar()"
+          [attr.aria-expanded]="isSidebarOpen"
+          aria-controls="admin-sidebar"
+          aria-label="Toggle sidebar menu"
         >
-          ↗
-        </button> -->
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
 
-    <!-- Statistics -->
-    <section class="stats">
-      <article class="stat-card">
-        <div class="stat-top">
-          <div class="stat-icon users-icon">♙</div>
-          <span class="stat-tag">ACCOUNTS</span>
-        </div>
-        <p class="stat-label">Total Users</p>
-        <h2>{{ stats[0].value }}</h2>
-        <div class="stat-footer">Registered user accounts</div>
-      </article>
+    <!-- Welcome Card -->
+    <section class="welcome-card">
+      <div class="welcome-content">
+        <span class="welcome-label">ADMIN WORKSPACE</span>
 
-      <article class="stat-card">
-        <div class="stat-top">
-          <div class="stat-icon active-icon">✓</div>
-          <span class="stat-tag">LIVE STATUS</span>
-        </div>
-        <p class="stat-label">Active Users</p>
-        <h2>{{ stats[1].value }}</h2>
-        <div class="stat-footer">
-          <span class="mini-dot"></span>
-          Active accounts
-        </div>
-      </article>
+        <h2>Welcome, {{ adminName }}!</h2>
 
-      <article class="stat-card">
-        <div class="stat-top">
-          <div class="stat-icon analysis-icon">⌁</div>
-          <span class="stat-tag">ANALYTICS</span>
-        </div>
-        <p class="stat-label">ABG Analyses</p>
-        <h2>{{ stats[2].value }}</h2>
-        <div class="stat-footer">Total analyses recorded</div>
-      </article>
+        <p>Monitor registered users and manage your ABG Analyzer platform.</p>
+      </div>
+
+      <div class="welcome-illustration">
+        <div class="illustration-circle">⌘</div>
+      </div>
     </section>
 
-    <!-- Users -->
-    <section class="users-panel">
-      <div class="panel-heading">
+    <!-- Statistics Cards -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon users-icon">♙</div>
+          <span class="stat-badge">Users</span>
+        </div>
+
+        <p class="stat-label">Total Users</p>
+
+        <h3>{{ totalUsers }}</h3>
+
+        <p class="stat-description">Registered platform users</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon active-icon">✓</div>
+          <span class="stat-badge">Active</span>
+        </div>
+
+        <p class="stat-label">Active Users</p>
+
+        <h3>{{ activeUsers }}</h3>
+
+        <p class="stat-description">Users marked as active</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon report-icon">▤</div>
+          <span class="stat-badge">Reports</span>
+        </div>
+
+        <p class="stat-label">ABG Analyses</p>
+
+        <h3>{{ totalReports }}</h3>
+
+        <p class="stat-description">Analysis count requires report API</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon system-icon">⚙</div>
+          <span class="stat-badge">System</span>
+        </div>
+
+        <p class="stat-label">System Status</p>
+
+        <h3 class="status-value">Ready</h3>
+
+        <p class="stat-description">Admin dashboard</p>
+      </div>
+    </section>
+
+    <!-- Users Section -->
+    <section class="users-section">
+      <div class="section-heading">
         <div>
-          <div class="section-eyebrow">USER MANAGEMENT</div>
-          <h2>All users</h2>
-          <p>View registered accounts, roles and account status.</p>
+          <h2>Registered Users</h2>
+
+          <p>View all users registered on your platform.</p>
         </div>
 
         <button
-          class="refresh-btn"
           type="button"
-          (click)="loadUsers()"
+          class="refresh-btn"
           [disabled]="loadingUsers"
+          (click)="loadUsers()"
         >
-          <span [class.spin]="loadingUsers">↻</span>
-          {{ loadingUsers ? "Refreshing" : "Refresh" }}
+          <span>↻</span>
+          {{ loadingUsers ? "Loading..." : "Refresh" }}
         </button>
       </div>
 
-      <div class="table-meta">
-        <div class="user-count">
-          <span class="count-dot"></span>
-          {{ users.length }} user{{ users.length === 1 ? "" : "s" }} found
-        </div>
-        <span class="filter-label">Admin accounts excluded</span>
+      <!-- Loading -->
+      <div class="message-card" *ngIf="loadingUsers">
+        <div class="loading-spinner"></div>
+        <p>Loading users...</p>
       </div>
 
-      <div *ngIf="loadingUsers" class="state-message">
-        <span class="loader"></span>
-        <span>Loading user accounts...</span>
+      <!-- Error -->
+      <div
+        class="message-card error-message"
+        *ngIf="!loadingUsers && usersError"
+      >
+        <span class="message-icon">!</span>
+
+        <p>{{ usersError }}</p>
+
+        <button type="button" class="retry-btn" (click)="loadUsers()">
+          Try Again
+        </button>
       </div>
 
-      <div *ngIf="usersError && !loadingUsers" class="error-state">
-        <span class="error-icon">!</span>
-        <div>
-          <strong>Couldn't load users</strong>
-          <p>{{ usersError }}</p>
-        </div>
-        <button type="button" (click)="loadUsers()">Try again</button>
-      </div>
-
+      <!-- Users Table -->
       <div class="table-container" *ngIf="!loadingUsers && !usersError">
-        <table *ngIf="users.length > 0; else noUsers">
+        <table class="users-table">
           <thead>
             <tr>
-              <th>USER</th>
-              <th>ROLE</th>
-              <th>ACCOUNT STATUS</th>
-              <th>JOINED DATE</th>
+              <th>#</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let user of users; let i = index">
+              <td>{{ i + 1 }}</td>
+
               <td>
-                <div class="user-cell">
-                  <div class="user-avatar" [attr.data-index]="i % 5">
-                    {{ (user.name || "U").charAt(0).toUpperCase() }}
+                <div class="user-info">
+                  <div class="user-avatar">
+                    {{
+                      (user.name || user.full_name || user.username || "U")
+                        .charAt(0)
+                        .toUpperCase()
+                    }}
                   </div>
+
                   <div class="user-details">
-                    <strong>{{ user.name || "Unnamed user" }}</strong>
-                    <span>{{ user.email }}</span>
+                    <strong>
+                      {{
+                        user.name ||
+                          user.full_name ||
+                          user.username ||
+                          "Unnamed User"
+                      }}
+                    </strong>
+
+                    <span>
+                      User ID:
+                      {{ user.id || user.user_id || user.row_id || "—" }}
+                    </span>
                   </div>
                 </div>
               </td>
 
               <td>
-                <span class="role-pill">{{ user.role }}</span>
+                {{ user.email || user.email_address || "—" }}
+              </td>
+
+              <td>
+                <span class="role-badge">
+                  {{ user.role || user.user_role || "USER" }}
+                </span>
               </td>
 
               <td>
                 <span
-                  class="status-pill"
-                  [class.status-active]="user.is_active"
-                  [class.status-inactive]="!user.is_active"
+                  class="status-badge"
+                  [class.status-active]="user.is_active === true"
+                  [class.status-inactive]="user.is_active !== true"
                 >
-                  <span class="status-dot"></span>
-                  {{ user.is_active ? "Active" : "Inactive" }}
+                  {{ user.is_active === true ? "Active" : "Inactive" }}
                 </span>
               </td>
+            </tr>
 
-              <td class="date-cell">
-                {{ user.cr_on ? (user.cr_on | date: "dd MMM yyyy") : "—" }}
+            <!-- Empty State -->
+            <tr *ngIf="users.length === 0">
+              <td colspan="5">
+                <div class="empty-state">
+                  <div class="empty-state-icon">♙</div>
+
+                  <h3>No users found</h3>
+
+                  <p>No registered users were returned by the API.</p>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
-
-        <ng-template #noUsers>
-          <div class="empty-state">
-            <div class="empty-icon">♙</div>
-            <h3>No users yet</h3>
-            <p>Registered user accounts will appear here.</p>
-            <button type="button" (click)="loadUsers()">Refresh list</button>
-          </div>
-        </ng-template>
       </div>
 
-      <footer
+      <!-- Users Footer -->
+      <div
         class="table-footer"
         *ngIf="!loadingUsers && !usersError && users.length > 0"
       >
-        <span
-          >Showing {{ users.length }} user{{
-            users.length === 1 ? "" : "s"
-          }}</span
-        >
-        <span>Sorted by newest registration</span>
-      </footer>
+        Showing {{ users.length }} users
+      </div>
     </section>
 
-    <footer class="page-footer">
-      <span>© {{ currentYear }} Kirti Classess. All rights reserved.</span>
-      <span>Admin workspace</span>
+    <!-- Quick Actions -->
+    <section class="quick-actions-section">
+      <div class="section-heading">
+        <div>
+          <h2>Quick Actions</h2>
+          <p>Quick access to common admin tasks.</p>
+        </div>
+      </div>
+
+      <div class="quick-actions-grid">
+        <a routerLink="/admin-users" class="action-card">
+          <div class="action-icon users-icon">♙</div>
+
+          <div class="action-copy">
+            <h3>Manage Users</h3>
+            <p>View and manage registered users.</p>
+          </div>
+
+          <span class="action-arrow">→</span>
+        </a>
+
+        <a routerLink="/admin-reports" class="action-card">
+          <div class="action-icon report-icon">▤</div>
+
+          <div class="action-copy">
+            <h3>View Reports</h3>
+            <p>Review ABG analysis reports.</p>
+          </div>
+
+          <span class="action-arrow">→</span>
+        </a>
+
+        <a routerLink="/admin-settings" class="action-card">
+          <div class="action-icon system-icon">⚙</div>
+
+          <div class="action-copy">
+            <h3>Settings</h3>
+            <p>Manage platform settings.</p>
+          </div>
+
+          <span class="action-arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <span>© {{ currentYear }} ABG Analyzer</span>
+      <span>Admin Dashboard</span>
     </footer>
   </main>
 </div>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { HomeComponent } from './components/pages/home/home.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
@@ -13,48 +14,29 @@ import { PatientSugarComponent } from './components/pages/patient-sugar/patient-
 import { PatientSugarHistoryComponent } from './components/pages/patient-sugar-history/patient-sugar-history.component';
 
 export const routes: Routes = [
+  // { path: '', redirectTo: 'welcome', pathMatch: 'full' },
 
-
-    {
+  {
     path: '',
     component: HomeComponent
   },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-    { path: 'welcome', component: WelcomeComponent },
-      { path: 'signup', component: SignupComponent },
-       { path: 'admin-dashboard', component: AdminDashboardComponent },
+
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'welcome', component: WelcomeComponent },
+  { path: 'signup', component: SignupComponent },
+
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'user-dashboard', component: UserDashboardComponent },
-   {
-    path: 'patient-blood-sugar',
-    component: PatientBloodSugarComponent
-  },
-  {
-    path: 'old-patients',
-    component: OldPatientsComponent
-  },
-  {
-    path: 'new-patient',
-    component: NewPatientComponent
-  },
-  {
-    path: 'abg-calculator',
-    component: AbgCalculatorComponent
-  },
-  {
-    path: 'patient-current-sugar',
-    component: PatientSugarComponent
-  },
-  {
-  path: 'patient-sugar-history',
-  component: PatientSugarHistoryComponent
-},
 
-  {
-    path: '**',
-    redirectTo: ''
-  }
+  { path: 'patient-blood-sugar', component: PatientBloodSugarComponent },
+  { path: 'new-patient', component: NewPatientComponent },
+  { path: 'old-patients', component: OldPatientsComponent },
 
+  { path: 'abg-calculator', component: AbgCalculatorComponent },
+  { path: 'patient-current-sugar', component: PatientSugarComponent },
+  { path: 'patient-sugar-history', component: PatientSugarHistoryComponent },
+
+  // Unknown URLs
+  { path: '**', redirectTo: 'welcome' }
 ];

@@ -1070,3 +1070,24 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.menu-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 12px;
+  margin-top: auto;
+  color: #c13e48;
+  background: #fff4f4;
+  border: 1px solid #f7dddd;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-logout:hover {
+  background: #ffe9e9;
+}

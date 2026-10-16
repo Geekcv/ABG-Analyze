@@ -161,14 +161,19 @@
               {{ showConfirmPassword ? 'Hide' : 'Show' }}
             </button>
           </div>
-          <small class="field-error"
-            *ngIf="confirmModel.touched && confirmPassword && password !== confirmPassword">
-            Passwords do not match.
-          </small>
-          <small class="field-error"
-            *ngIf="submitted && !confirmPassword">
-            Please confirm your password.
-          </small>
+          
+<small
+  class="field-error"
+  *ngIf="confirmModel.touched && confirmPassword && password !== confirmPassword">
+  Passwords do not match.
+</small>
+
+<small
+  class="field-error"
+  *ngIf="submitted && !confirmPassword">
+  Please confirm your password.
+</small>
+
           <small class="field-error"
             *ngIf="submitted && confirmPassword && password !== confirmPassword">
             Passwords do not match.
