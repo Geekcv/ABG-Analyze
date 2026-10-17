@@ -12,6 +12,7 @@ import { NewPatientComponent } from './components/pages/new-patient/new-patient.
 import { AbgCalculatorComponent } from './components/pages/abg-calculator/abg-calculator.component';
 import { PatientSugarComponent } from './components/pages/patient-sugar/patient-sugar.component';
 import { PatientSugarHistoryComponent } from './components/pages/patient-sugar-history/patient-sugar-history.component';
+import { AdminProfileComponent } from './components/pages/admin-profile/admin-profile.component';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'welcome', pathMatch: 'full' },
@@ -36,7 +37,10 @@ export const routes: Routes = [
   { path: 'abg-calculator', component: AbgCalculatorComponent },
   { path: 'patient-current-sugar', component: PatientSugarComponent },
   { path: 'patient-sugar-history', component: PatientSugarHistoryComponent },
-
+ {
+    path: 'admin-profile',
+    component: AdminProfileComponent
+  },
   // Unknown URLs
   { path: '**', redirectTo: 'welcome' }
 ];

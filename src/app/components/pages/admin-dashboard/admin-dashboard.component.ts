@@ -302,6 +302,7 @@ async confirmUserAction(): Promise<void> {
 
 
 openProfile(){
+  this.router.navigate(['/admin-profile']);
 
 }
 

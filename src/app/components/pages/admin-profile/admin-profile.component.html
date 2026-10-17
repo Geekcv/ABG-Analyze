@@ -1,0 +1,183 @@
+
+<div class="profile-page">
+
+
+<!-- Sticky Page Header -->
+<header class="profile-topbar">
+  <div class="page-heading">
+    <button
+      type="button"
+      class="back-btn"
+      (click)="goBack()"
+    >
+      <span class="back-arrow">←</span>
+      <span>Back</span>
+    </button>
+
+    <div class="heading-copy">
+      <h1>My Profile</h1>
+      <p>Manage your administrator account and security settings.</p>
+    </div>
+  </div>
+
+  <span class="admin-badge">Administrator</span>
+</header>
+
+  <div class="profile-layout">
+
+    <aside class="profile-card">
+      <div class="avatar">
+        {{ profile.name ? profile.name.charAt(0).toUpperCase() : 'A' }}
+      </div>
+
+      <h2>{{ profile.name || 'Admin Name' }}</h2>
+      <p class="profile-email">
+        {{ profile.email || 'admin@example.com' }}
+      </p>
+
+      <span class="status-badge">
+        <span class="status-dot"></span>
+        Administrator Account
+      </span>
+
+      <div class="profile-divider"></div>
+
+      <div class="profile-info">
+        <span>Account Role</span>
+        <strong>Admin</strong>
+      </div>
+
+      <div class="profile-info">
+        <span>Profile Settings</span>
+        <strong>Personal Details</strong>
+      </div>
+    </aside>
+
+    <section class="settings-card">
+      <div class="section-heading">
+        <div>
+          <h2>Personal Information</h2>
+          <p>Update your account details.</p>
+        </div>
+        <span class="section-icon">01</span>
+      </div>
+
+      <form #profileForm="ngForm"
+            (ngSubmit)="saveProfile()">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              [(ngModel)]="profile.name"
+              placeholder="Enter your full name"
+              required
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              [(ngModel)]="profile.email"
+              placeholder="Enter your email"
+              required
+              email
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="role">Account Role</label>
+            <input
+              id="role"
+              type="text"
+              name="role"
+              [value]="profile.role"
+              readonly
+            />
+            <small>Role can only be changed by an authorized system process.</small>
+          </div>
+
+        </div>
+
+        <div class="section-heading security-heading">
+          <div>
+            <h2>Change Password</h2>
+            <p>Leave blank if you don't want to change your password.</p>
+          </div>
+          <span class="section-icon">02</span>
+        </div>
+
+        <div class="form-grid">
+
+          <div class="form-group full-width">
+            <label for="currentPassword">Current Password</label>
+            <input
+              id="currentPassword"
+              type="password"
+              name="currentPassword"
+              [(ngModel)]="profile.currentPassword"
+              placeholder="Enter current password"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input
+              id="newPassword"
+              type="password"
+              name="newPassword"
+              [(ngModel)]="profile.newPassword"
+              placeholder="Minimum 8 characters"
+              autocomplete="new-password"
+              minlength="8"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              name="confirmPassword"
+              [(ngModel)]="profile.confirmPassword"
+              placeholder="Re-enter new password"
+              autocomplete="new-password"
+            />
+          </div>
+
+        </div>
+
+        <div class="message" *ngIf="message" role="status">
+          {{ message }}
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn-cancel"
+            (click)="cancelChanges()">
+            Cancel
+          </button>
+
+          <button
+  type="submit"
+  class="btn-save"
+  [disabled]="profileForm.invalid || saving || loading">
+  {{ saving ? 'Saving...' : loading ? 'Loading...' : 'Save Changes' }}
+</button>
+        </div>
+
+      </form>
+    </section>
+
+  </div>
+</div>
