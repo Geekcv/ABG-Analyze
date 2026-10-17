@@ -117,4 +117,192 @@ export class AdminDashboardComponent implements OnInit {
 
     this.router.navigate(['/login']);
   }
+
+
+
+ async manageUser(
+  user: any,
+  action: 'activate' | 'deactivate' | 'delete' | 'restore'
+): Promise<void> {
+
+  if (!user?.row_id) {
+    alert('User ID not found');
+    return;
+  }
+
+  const messages: Record<string, string> = {
+    activate: 'Are you sure you want to activate this user?',
+    deactivate: 'Are you sure you want to deactivate this user?',
+    delete: 'Are you sure you want to delete this user?',
+    restore: 'Are you sure you want to restore this user?'
+  };
+
+  if (!confirm(messages[action])) {
+    return;
+  }
+
+  try {
+    user.actionLoading = true;
+
+    const resp: any = await this.Apicontroller.manageUserStatus({
+      row_id: user.row_id,
+      action: action
+    });
+
+    if (resp?.status === 0) {
+      alert(resp.msg || 'User updated successfully');
+
+      // Refresh user list using your existing API
+      await this.loadUsers();
+    } else {
+      alert(resp?.msg || 'Unable to update user');
+    }
+
+  } catch (error) {
+    console.error('Manage user error:', error);
+    alert('Unable to connect to the server.');
+  } finally {
+    user.actionLoading = false;
+  }
+}
+
+
+
+showUserDialog = false;
+
+selectedUser: any = null;
+
+selectedAction:
+  | 'activate'
+  | 'deactivate'
+  | 'delete'
+  | 'restore' = 'activate';
+
+get dialogTitle(): string {
+  const titles: Record<string, string> = {
+    activate: 'Activate User?',
+    deactivate: 'Deactivate User?',
+    delete: 'Delete User?',
+    restore: 'Restore User?'
+  };
+
+  return titles[this.selectedAction];
+}
+
+get dialogMessage(): string {
+  const messages: Record<string, string> = {
+    activate: 'This user will be able to access the system.',
+    deactivate: 'This user will no longer be able to access the system.',
+    delete: 'This user will be moved to the deleted users list.',
+    restore: 'This user will be restored to the user list.'
+  };
+
+  return messages[this.selectedAction];
+}
+
+get confirmButtonText(): string {
+  const labels: Record<string, string> = {
+    activate: 'Yes, Activate',
+    deactivate: 'Yes, Deactivate',
+    delete: 'Yes, Delete',
+    restore: 'Yes, Restore'
+  };
+
+  return labels[this.selectedAction];
+}
+
+openUserDialog(
+  user: any,
+  action: 'activate' | 'deactivate' | 'delete' | 'restore'
+): void {
+  this.selectedUser = user;
+  this.selectedAction = action;
+  this.showUserDialog = true;
+}
+
+closeUserDialog(): void {
+  if (this.selectedUser?.actionLoading) {
+    return;
+  }
+
+  this.showUserDialog = false;
+  this.selectedUser = null;
+}
+
+
+
+toastMessage = '';
+toastType: 'success' | 'error' = 'success';
+showToast = false;
+
+private toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+showToastMessage(
+  message: string,
+  type: 'success' | 'error' = 'success'
+): void {
+  if (this.toastTimer) {
+    clearTimeout(this.toastTimer);
+  }
+
+  this.toastMessage = message;
+  this.toastType = type;
+  this.showToast = true;
+
+  this.toastTimer = setTimeout(() => {
+    this.showToast = false;
+    this.toastTimer = null;
+  }, 3000);
+}
+
+async confirmUserAction(): Promise<void> {
+  if (!this.selectedUser || this.selectedUser.actionLoading) {
+    return;
+  }
+
+  const user = this.selectedUser;
+  const action = this.selectedAction;
+
+  try {
+    user.actionLoading = true;
+
+    const resp: any =
+      await this.Apicontroller.manageUserStatus({
+        row_id: user.row_id,
+        action
+      });
+
+    if (resp?.status === 0) {
+      this.showUserDialog = false;
+      this.selectedUser = null;
+
+      this.showToastMessage(
+        resp?.msg || 'User updated successfully.',
+        'success'
+      );
+
+      await this.loadUsers();
+    } else {
+      this.showToastMessage(
+        resp?.msg || 'Unable to update user.',
+        'error'
+      );
+    }
+  } catch (error) {
+    console.error('Manage user error:', error);
+
+    this.showToastMessage(
+      'Unable to connect to the server.',
+      'error'
+    );
+  } finally {
+    user.actionLoading = false;
+  }
+}
+
+
+openProfile(){
+
+}
+
 }

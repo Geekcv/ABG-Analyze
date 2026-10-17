@@ -49,8 +49,6 @@
         <span>All Patient Current Sugar</span>
       </a>
 
-      
-
       <!-- <a
         routerLink="/admin-settings"
         routerLinkActive="active"
@@ -89,19 +87,19 @@
     <!-- Sticky Header -->
     <header class="topbar">
       <div class="page-heading">
-        <div class="breadcrumb">Workspace <span>/</span> Dashboard</div>
-
-        <h1>Dashboard Overview</h1>
-
-        <p>Welcome back, {{ adminName }}. Manage your platform here.</p>
+        <h1>Dashboard</h1>
       </div>
 
       <div class="topbar-right">
-        <div class="admin-chip">
-          <span class="admin-chip-dot"></span>
-          ADMIN ACCESS
-        </div>
+        <!-- My Profile Button -->
+        <button type="button" class="profile-btn" (click)="openProfile()">
+          <span class="profile-avatar">
+            {{ (adminName || "A").charAt(0).toUpperCase() }}
+          </span>
+          <span>My Profile</span>
+        </button>
 
+        <!-- Existing Mobile Menu -->
         <button
           type="button"
           class="mobile-menu-btn"
@@ -146,8 +144,6 @@
 
         <p class="stat-description">Registered platform users</p>
       </div>
-
-
 
       <div class="stat-card">
         <div class="stat-card-top">
@@ -214,6 +210,7 @@
               <th>Password</th>
               <th>Role</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -240,22 +237,17 @@
                           "Unnamed User"
                       }}
                     </strong>
-
-                    <span>
-                      User ID:
-                      {{ user.id || user.user_id || user.row_id || "—" }}
-                    </span>
+                    <span
+                      >User ID:
+                      {{ user.id || user.user_id || user.row_id || "—" }}</span
+                    >
                   </div>
                 </div>
               </td>
 
-              <td>
-                {{ user.email || user.email_address || "—" }}
-              </td>
+              <td>{{ user.email || user.email_address || "—" }}</td>
 
-              <td>
-                {{user.password_hash || "-"}}
-              </td>
+              <td>{{user.password_hash || "-"}}</td>
 
               <td>
                 <span class="role-badge">
@@ -272,16 +264,128 @@
                   {{ user.is_active === true ? "Active" : "Inactive" }}
                 </span>
               </td>
+
+              <td>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+
+  <button
+    *ngIf="!user.deleted_at && user.is_active !== true"
+    class="action-btn activate-btn"
+    type="button"
+    [disabled]="user.actionLoading"
+    (click)="openUserDialog(user, 'activate')"
+  >
+    Activate
+  </button>
+
+  <button
+    *ngIf="!user.deleted_at && user.is_active === true"
+    class="action-btn deactivate-btn"
+    type="button"
+    [disabled]="user.actionLoading"
+    (click)="openUserDialog(user, 'deactivate')"
+  >
+    Deactivate
+  </button>
+
+  <button
+    *ngIf="!user.deleted_at"
+    class="action-btn delete-btn"
+    type="button"
+    [disabled]="user.actionLoading"
+    (click)="openUserDialog(user, 'delete')"
+  >
+    Delete
+  </button>
+
+  <button
+    *ngIf="user.deleted_at"
+    class="action-btn restore-btn"
+    type="button"
+    [disabled]="user.actionLoading"
+    (click)="openUserDialog(user, 'restore')"
+  >
+    Restore
+  </button>
+
+</div>
+
+
+<!-- Confirmation Dialog -->
+<div
+  class="dialog-overlay"
+  *ngIf="showUserDialog"
+  (click)="closeUserDialog()"
+>
+  <div
+    class="confirmation-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dialogTitle"
+    (click)="$event.stopPropagation()"
+  >
+
+    <div
+      class="dialog-icon"
+      [ngClass]="'icon-' + selectedAction"
+    >
+      <span *ngIf="selectedAction === 'activate'">✓</span>
+      <span *ngIf="selectedAction === 'deactivate'">!</span>
+      <span *ngIf="selectedAction === 'delete'">×</span>
+      <span *ngIf="selectedAction === 'restore'">↻</span>
+    </div>
+
+    <h2 id="dialogTitle">
+      {{ dialogTitle }}
+    </h2>
+
+    <p class="dialog-message">
+      {{ dialogMessage }}
+    </p>
+
+    <p class="dialog-user" *ngIf="selectedUser">
+      {{ selectedUser.name || selectedUser.email }}
+    </p>
+
+    <div class="dialog-actions">
+      <button
+        type="button"
+        class="dialog-btn cancel-btn"
+        [disabled]="selectedUser?.actionLoading"
+        (click)="closeUserDialog()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="dialog-btn confirm-btn"
+        [ngClass]="'confirm-' + selectedAction"
+        [disabled]="selectedUser?.actionLoading"
+        (click)="confirmUserAction()"
+      >
+        <span *ngIf="!selectedUser?.actionLoading">
+          {{ confirmButtonText }}
+        </span>
+
+        <span *ngIf="selectedUser?.actionLoading">
+          Processing...
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>
+                
+              </td>
             </tr>
 
-            <!-- Empty State -->
             <tr *ngIf="users.length === 0">
-              <td colspan="5">
+              <td colspan="6">
                 <div class="empty-state">
-                  <div class="empty-state-icon">♙</div>
-
                   <h3>No users found</h3>
-
                   <p>No registered users were returned by the API.</p>
                 </div>
               </td>
@@ -299,11 +403,37 @@
       </div>
     </section>
 
-
     <!-- Footer -->
     <footer class="dashboard-footer">
       <span>© {{ currentYear }} ABG Analyzer</span>
       <span>Admin Dashboard</span>
     </footer>
   </main>
+</div>
+
+
+<!-- Toast Notification -->
+<div
+  class="toast-notification"
+  *ngIf="showToast"
+  [ngClass]="'toast-' + toastType"
+  role="status"
+  aria-live="polite"
+>
+  <span class="toast-icon">
+    {{ toastType === 'success' ? '✓' : '!' }}
+  </span>
+
+  <span class="toast-message">
+    {{ toastMessage }}
+  </span>
+
+  <button
+    type="button"
+    class="toast-close"
+    aria-label="Close notification"
+    (click)="showToast = false"
+  >
+    &times;
+  </button>
 </div>

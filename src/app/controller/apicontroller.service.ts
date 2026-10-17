@@ -118,5 +118,21 @@ async UpdatePatientSugar(data: any, url: string = 'common/') {
   return await this.apiService.postUrl(payload, url);
 }
 
+async manageUserStatus(
+  payload: {
+    row_id: string;
+    action: 'activate' | 'deactivate' | 'delete' | 'restore';
+  },
+  url: string = 'common/'
+) {
+  const data = {
+    fn: 'common_fn',
+    se: 'manage_user_status',
+    data: payload,
+  };
+
+  return await this.apiService.postUrl(data, url);
+}
+
 
 }
